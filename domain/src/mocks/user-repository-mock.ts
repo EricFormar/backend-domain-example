@@ -1,7 +1,7 @@
 import { User } from "../entities/User";
-import { UsersRepository } from "../repositories/user-repository";
+import { UserRepository } from "../repositories/user-repository";
 
-export interface MockedUsersRepository extends UsersRepository {
+export interface MockedUsersRepository extends UserRepository {
     users: User[];
 }
 
@@ -21,6 +21,5 @@ export function mockUsersRepository(users: User[] = []): MockedUsersRepository {
                 users.push({ ...user });
             }
         }
-
     };
 }

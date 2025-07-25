@@ -1,19 +1,19 @@
-import { User, UserRole } from "../entities/User";
+import { User } from "../entities/User";
 import { createInvalidDataError, InvalidDataError } from "../errors/error";
-import { UsersRepository } from "../repositories/user-repository";
+import { UserRepository } from "../repositories/user-repository";
 
 export type UserRegisterRequestModel = Omit<User, 'id' | 'role'>;
 
 export interface UserRegisterDependencies{
-    users: UsersRepository;
+    users: UserRepository;
 }
 
 export async function  UserRegister(
     { users } : UserRegisterDependencies,
-    { email, password, username }: UserRegisterRequestModel) :
+    { email, password, name }: UserRegisterRequestModel) :
     Promise < InvalidDataError | void > {
 
-    const hasErrors = validateData(email, password, username);
+    const hasErrors = validateData(email, password, name);
     if (hasErrors) return hasErrors;
 
     const existingUser = await users.findByEmail(email);
@@ -23,21 +23,21 @@ export async function  UserRegister(
         id: crypto.randomUUID(),
         email,
         password,
-        username,
+        name,
         role: "user"
     }
 
     users.save(user);
 }
 
-function validateData(email: string, password: string, username: string): InvalidDataError | void {
+function validateData(email: string, password: string, name: string): InvalidDataError | void {
     if (email.trim() === "") {
         return createInvalidDataError("Email must be not empty");
     }
     if (password.trim() === "") {
         return createInvalidDataError("Password must be not empty");
     }
-    if (username.trim() === "") {
-        return createInvalidDataError("Username must be not empty");
+    if (name.trim() === "") {
+        return createInvalidDataError("Name must be not empty");
     }
 }

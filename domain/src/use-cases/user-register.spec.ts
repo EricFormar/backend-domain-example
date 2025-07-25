@@ -12,7 +12,7 @@ describe("UserRegister Use Case", async () => {
         id : "existing user id",
         password: "12345678",
         email: "existing@user.com",
-        username: "Existing User",
+        name: "Existing User",
         role: "user" as UserRole
     }
     let _dependencies : UserRegisterDependencies;
@@ -28,7 +28,7 @@ describe("UserRegister Use Case", async () => {
         const payload: UserRegisterRequestModel = {
             email:"existing@user.com",
             password:"12345678",
-            username:"Test User",
+            name:"Test User",
         }
 
         const result = await UserRegister(_dependencies, payload);
@@ -40,7 +40,7 @@ describe("UserRegister Use Case", async () => {
         const payload : UserRegisterRequestModel = {
             email:"",
             password:"12345678",
-            username:"Test User",
+            name:"Test User",
         };
         const result = await UserRegister(_dependencies, payload);
 
@@ -51,29 +51,29 @@ describe("UserRegister Use Case", async () => {
         const payload : UserRegisterRequestModel = {
             email:"valid@email.com",
             password:"",
-            username:"Test User",
+            name:"Test User",
         };
         const result = await UserRegister(_dependencies, payload);
 
         expect(result).toEqual(createInvalidDataError("Password must be not empty"));
     })
 
-    test("With an empty username, fails with InvalidData", async () => {
+    test("With an empty name, fails with InvalidData", async () => {
         const payload : UserRegisterRequestModel = {
             email:"valid@email.com",
             password:"12345678",
-            username:"",
+            name:"",
         };
         const result = await UserRegister(_dependencies, payload);
 
-        expect(result).toEqual(createInvalidDataError("Username must be not empty"));
+        expect(result).toEqual(createInvalidDataError("Name must be not empty"));
     });
 
     test("With valid data, registers the user successfully", async () => {
         const payload : UserRegisterRequestModel = {
             email:"valid@email.com",
             password:"12345678",
-            username:"User Test",
+            name:"User Test",
         };
 
         const result = await UserRegister(_dependencies, payload);
