@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, test } from "vitest";
 
 import { createNotFoundError } from "../../errors/error";
-import { BrandFindByIdDependencies } from "./brand-find-by-id";
-import { updateBrand } from "./update-brand";
+import { BrandUpdateDependencies, updateBrand } from "./update-brand";
 import { createBrandRepositoryMock, MockedBrandRepository } from "../../mocks/brand-respository-mock";
 import { createBrandMock } from "../../mocks/brand-mock";
 
@@ -14,7 +13,7 @@ describe("Update Brand", () => {
       createBrandMock({ id: "other-id" }),
     ]);
 
-  let _dependencies: BrandFindByIdDependencies;
+  let _dependencies: BrandUpdateDependencies;
 
   beforeEach(() => {
     _dependencies = {
