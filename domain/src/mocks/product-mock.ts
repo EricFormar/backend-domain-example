@@ -7,6 +7,7 @@ export function createProductMock(opts: Partial<Product> = {}) {
         description: 'any description',
         price: 100,
         categoryId: 'any-category-id',
+        brandId : "any-brand-id",
         ...opts
     }
 }
