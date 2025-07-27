@@ -1,4 +1,3 @@
-import { Product } from "../../entities/Product";
 import { createNotFoundError, NotFoundError } from "../../errors/error";
 import { ProductRepository } from "../../repositories/product-repository";
 
