@@ -28,11 +28,14 @@ export function createCategoryRepositoryMock(
       return category;
     },
     delete: async function (id: String) {
-      const index = this.categories.findIndex((product) => product.id === id);
-      this.categories.splice(index, 1);
-      return true;
+      const index = this.categories.findIndex((c) => c.id === id);
+      if (index !== -1) {
+        this.categories.splice(index, 1);
+        return true;
+      }
+      return false;
     },
-     findByName: async function (name: string): Promise<Category | null> {
+    findByName: async function (name: string): Promise<Category | null> {
       const category = this.categories.find((c) => c.name === name);
       return category || null;
     },
