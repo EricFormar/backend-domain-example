@@ -10,15 +10,27 @@ export interface InvalidDataError extends AppError {
     httpStatus: 400;
 }
 
+export interface NotFoundError extends AppError {
+    type : "Not Found";
+     message: string;
+    httpStatus: 404;
+};
+
+export interface BadRequestError extends AppError {
+      type : "Bad Request";
+     message: string;
+    httpStatus: 400;
+}
+
 export const createInvalidDataError = (_message: string): InvalidDataError => ({
     type: 'InvalidData',
     message: _message,
     httpStatus: 400
 });
 
-export const createNotFoundError = (): AppError => ({
+export const createNotFoundError = (_message: string): NotFoundError => ({
     type: 'Not Found',
-    message: "404 Not Found",
+    message: _message,
     httpStatus: 404
 });
 
@@ -34,9 +46,9 @@ export const createCredentialsError = (): AppError => ({
     httpStatus: 400
 });
 
-export const createMissingDataError = (): AppError => ({
-    type: 'MissingDataError',
-    message: "400 Bad Request",
+export const createMissingDataError = (_message: string): BadRequestError => ({
+    type: 'Bad Request',
+    message: _message,
     httpStatus: 400
 });
 
