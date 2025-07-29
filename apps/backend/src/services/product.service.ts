@@ -30,7 +30,11 @@ export function productService(): ProductRepository {
     // Get all product
     findAll: async function () {
       try {
-        const products = await ProductModel.findAll();
+        const products = await ProductModel.findAll({
+          include : ["category", "brand"]
+        });
+        console.log(products);
+        
         const mappedProducts: Product[] = products.map((product: ProductModel) =>
           _mapToProductResponseDto(product)
         );
