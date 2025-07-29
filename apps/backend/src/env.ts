@@ -8,7 +8,7 @@ const envFile = `.env.${mode}`;
 config({ path: path.join(__dirname,'environments', envFile) });
 
 export const {
-    PORT,
+    PORT = 3000,
     NODE_ENV,
     BASE_URL,
     DB_HOST,
