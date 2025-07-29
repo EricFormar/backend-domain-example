@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { createBadRequestError, createInternalServerError } from "@domain/src/errors/error";
 import { brandService } from "../services/brand.service";
-import { Brand } from "@domain/src/entities/Brand";
+import { createBadRequestError, createInternalServerError } from "@project-example/domain/errors/error";
+import { Brand } from "@project-example/domain/entities/Brand";
 
 export function brandController() {
 const service = brandService();
