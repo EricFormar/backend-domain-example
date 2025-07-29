@@ -1,0 +1,108 @@
+import { Request, Response } from "express";
+import { createInternalServerError } from "@domain/src/errors/error";
+import { productService } from "../services/product.service";
+import { Product } from "@domain/src/entities/Product";
+
+export function productController() {
+const service = productService();
+  return {
+    // Get all products
+    getAllProducts: async (req: Request, res: Response) => {
+      try {
+        const products = await service.findAll()
+        return res.status(200).json({
+          ok: true,
+          data: products,
+        });
+      } catch (e) {
+        const error =
+          createInternalServerError(
+            "Upss, hubo un error al obtener las productos"
+          ) || e;
+        return res.status(error.httpStatus).json({
+          ok: false,
+          message: error.message,
+        });
+      }
+    },
+    // Get product by id
+    getProductById: async (req: Request, res: Response) => {
+      try {
+        const product = await  service.findById(req.params.productId);
+        return res.status(200).json({
+          ok: true,
+          data: product,
+        });
+      } catch (e) {
+        const error =
+          createInternalServerError(
+            "Upss, hubo un error al obtener la producto"
+          ) || e;
+        return res.status(error.httpStatus).json({
+          ok: false,
+          message: error.message,
+        });
+      }
+    },
+    // Create product
+     createNewProduct: async (req: Request, res: Response) => {
+      try {
+        const newProduct = await service.create({
+            ...req.body, //TODO: VALIDAR CON UN MIDDLEWARE
+        })
+        return res.status(200).json({
+          ok: true,
+          data: newProduct,
+        });
+      } catch (e) {
+        const error =
+          createInternalServerError(
+            "Upss, hubo un error al crear una nueva producto"
+          ) || e;
+        return res.status(error.httpStatus).json({
+          ok: false,
+          message: error.message,
+        });
+      }
+    },
+    // Update product
+    updateProduct : async (req: Request, res : Response) => {
+      try {
+        const product : Partial<Product> = {...req.body, id : req.params.productId}
+        const updatedProduct = await service.update(product)
+        return res.status(200).json({
+          ok: true,
+          data: updatedProduct,
+        });
+      } catch (e) {
+           const error =
+          createInternalServerError(
+            "Upss, hubo un error al actualizar una nueva producto"
+          ) || e;
+        return res.status(error.httpStatus).json({
+          ok: false,
+          message: error.message,
+        });
+      }
+    },
+    // Delete product
+     deleteProduct : async (req: Request, res : Response) => {
+      try {
+        const {productId} = req.params;
+        await service.delete(productId)
+        return res.status(200).json({
+          ok: true,
+        });
+      } catch (e) {
+           const error =
+          createInternalServerError(
+            "Upss, hubo un error al eliminar la producto"
+          ) || e;
+        return res.status(error.httpStatus).json({
+          ok: false,
+          message: error.message,
+        });
+      }
+    },
+  };
+}
