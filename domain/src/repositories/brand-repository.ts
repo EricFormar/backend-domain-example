@@ -1,10 +1,10 @@
 import { Brand } from "../entities/Brand";
 
 export interface BrandRepository {
-  findAll(): Promise<Brand[]>;
-  findById(brandId: string): Promise<Brand | null>;
-  create(brand: Omit<Brand, "id">): Promise<Brand>;
-  update(brand: Partial<Brand>): Promise<Brand>;
-  delete(brandId: string): Promise<boolean>;
-  findByName(name: string): Promise<Brand | null>;
+  findAll(): Promise<Brand[] | Error>;
+  findById(brandId: string): Promise<Brand | Error >;
+  create(brand: Omit<Brand, "id">): Promise<Brand | Error>;
+  update(brand: Partial<Brand>): Promise<Brand | Error>;
+  delete(brandId: string): Promise<void | Error>;
+  findByName(name: string): Promise<Brand | Error>;
 }

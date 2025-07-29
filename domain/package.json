@@ -1,6 +1,8 @@
 {
-  "name": "domain",
+  "name": "@backend-example/domain",
+  "description": "Lógica de negocio compartida",
   "version": "1.0.0",
+  "private": true,
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -9,5 +11,8 @@
   },
   "devDependencies": {
     "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@vitest/coverage-v8": "^3.2.4"
   }
 }
