@@ -2,6 +2,7 @@ import { default as BrandModel } from "../database/models/brand";
 import { BrandRepository } from "@project-example/domain/repositories/brand-repository";
 import { BrandResponseDto } from "../dtos/brand-response.dto";
 import { Brand } from "@project-example/domain/entities/Brand";
+import { createNotFoundError } from "@project-example/domain/errors/error";
 
 export function brandService(): BrandRepository {
   const _mapToBrandResponseDto = (brand: BrandModel): BrandResponseDto => {
