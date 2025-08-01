@@ -1,20 +1,17 @@
 import { Request, Response } from "express";
-import { createBadRequestError, createInternalServerError, createNotFoundError } from "@domain/src/errors/error";
+import { createBadRequestError, createInternalServerError, createNotFoundError } from "@project-example/domain/errors/error";
 import { brandService } from "../services/brand.service";
-import { Brand } from "@domain/src/entities/Brand";
-import {ListBrandDependencies, listBrands} from "@domain/src/use-cases/brand/brand-list"
-import {findBrandById } from "@domain/src/use-cases/brand/brand-find-by-id";
-import {brandCreate} from "@domain/src/use-cases/brand/create-brand";
-import {updateBrand} from "@domain/src/use-cases/brand/update-brand";
-import {deleteBrand} from "@domain/src/use-cases/brand/delete-brand";
+import { Brand } from "@project-example/domain/entities/Brand";
+import {ListBrandDependencies, listBrands} from "@project-example/domain/use-cases/brand/brand-list"
+import {findBrandById } from "@project-example/domain/use-cases/brand/brand-find-by-id";
+import {brandCreate} from "@project-example/domain/use-cases/brand/create-brand";
+import {updateBrand} from "@project-example/domain/use-cases/brand/update-brand";
+import {deleteBrand} from "@project-example/domain/use-cases/brand/delete-brand";
 
 export function brandController() {
   return {
     // Get all brands
     getAllBrands: async (req: Request, res: Response) => {
-      const dependencies : ListBrandDependencies = {
-        brandRepository : brandService()
-      }
       try {
         const brands = await listBrands({
           brandRepository : brandService()
