@@ -112,7 +112,7 @@
   },
   "references": [
     {
-      "path": "./domaain"
+      "path": "./domain"
     },
     {
       "path": "./apps/backend"
