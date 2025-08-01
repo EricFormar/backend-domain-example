@@ -1,15 +1,24 @@
 import { Request, Response } from "express";
-import { createBadRequestError, createInternalServerError } from "@domain/src/errors/error";
+import { createBadRequestError, createInternalServerError, createNotFoundError } from "@domain/src/errors/error";
 import { brandService } from "../services/brand.service";
 import { Brand } from "@domain/src/entities/Brand";
+import {ListBrandDependencies, listBrands} from "@domain/src/use-cases/brand/brand-list"
+import {findBrandById } from "@domain/src/use-cases/brand/brand-find-by-id";
+import {brandCreate} from "@domain/src/use-cases/brand/create-brand";
+import {updateBrand} from "@domain/src/use-cases/brand/update-brand";
+import {deleteBrand} from "@domain/src/use-cases/brand/delete-brand";
 
 export function brandController() {
-const service = brandService();
   return {
     // Get all brands
     getAllBrands: async (req: Request, res: Response) => {
+      const dependencies : ListBrandDependencies = {
+        brandRepository : brandService()
+      }
       try {
-        const brands = await service.findAll()
+        const brands = await listBrands({
+          brandRepository : brandService()
+        })
         return res.status(200).json({
           ok: true,
           data: brands,
@@ -28,7 +37,15 @@ const service = brandService();
     // Get brand by id
     getBrandById: async (req: Request, res: Response) => {
       try {
-        const brand = await  service.findById(req.params.brandId);
+        const {brandId} = req.params;
+        const brand = await findBrandById({
+          brandRepository : brandService()
+        },{
+          id : brandId
+        });
+
+        if (!brand) throw createNotFoundError("No existe una marca con el ID " + brandId);
+        
         return res.status(200).json({
           ok: true,
           data: brand,
@@ -45,16 +62,20 @@ const service = brandService();
       }
     },
     // Create brand
-     createNewBrand: async (req: Request, res: Response) => {
+    createNewBrand: async (req: Request, res: Response) => {
       try {
         const {name, image} = req.body;
           if (!name || name === "") {
           throw createBadRequestError("Error en los datos ingresados");
         }
-        const newBrand = await service.create({
-            name,
-            image
-        })
+
+        const newBrand = await brandCreate({
+          brandRepository : brandService()
+        },{
+          name,
+          image
+        });
+
         return res.status(200).json({
           ok: true,
           data: newBrand,
@@ -73,14 +94,18 @@ const service = brandService();
     // Update brand
     updateBrand : async (req: Request, res : Response) => {
       try {
-        const brand : Partial<Brand> = {...req.body, id : req.params.brandId}
-        const updatedBrand = await service.update(brand)
+        const brand : Brand = {...req.body, id : req.params.brandId}
+        const updatedBrand = await updateBrand({
+          brandRepository : brandService()
+        },{
+          brandToUpdate : brand
+        })
         return res.status(200).json({
           ok: true,
           data: updatedBrand,
         });
       } catch (e) {
-           const error =
+          const error =
           createInternalServerError(
             "Upss, hubo un error al actualizar una nueva marca"
           ) || e;
@@ -91,15 +116,19 @@ const service = brandService();
       }
     },
     // Delete brand
-     deleteBrand : async (req: Request, res : Response) => {
+    deleteBrand : async (req: Request, res : Response) => {
       try {
         const {brandId} = req.params;
-        await service.delete(brandId)
+        await deleteBrand({
+          brandRepository : brandService()
+        },{
+          id : +brandId
+        });
         return res.status(200).json({
           ok: true,
         });
       } catch (e) {
-           const error =
+          const error =
           createInternalServerError(
             "Upss, hubo un error al eliminar la marca"
           ) || e;
