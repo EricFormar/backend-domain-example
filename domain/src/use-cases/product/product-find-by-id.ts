@@ -7,7 +7,7 @@ export interface ProductFindByIdDependencies {
 }
 
 export interface ProductFindByIdRequestModel {
-  id: string;
+  id: number;
 }
 
 export async function findProductById(
