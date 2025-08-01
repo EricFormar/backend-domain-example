@@ -12,7 +12,7 @@ export function createProductRepositoryMock(
     findAll: async function () {
       return this.products;
     },
-    findById: async function (id: string): Promise<Product | null> {
+    findById: async function (id: number): Promise<Product | null> {
       return this.products.find((product) => product.id === id) || null;
     },
     create: async function (product: Product) {
@@ -26,13 +26,11 @@ export function createProductRepositoryMock(
       }
       return this.products[index]
     },
-    delete: async function (id: string) {
+    delete: async function (id: number) {
       const index = this.products.findIndex((product) => product.id === id);
       if (index !== -1) {
         this.products.splice(index, 1);
-        return true;
       }
-      return false;
     },
     search: async function (data: Partial<Product>) {
       let productsFiltered = [...this.products];
@@ -50,14 +48,14 @@ export function createProductRepositoryMock(
         );
       }
 
-      if (data.brandId) {
+      if (data.brand?.id) {
         productsFiltered = productsFiltered.filter(
-          (product) => product.brandId === data.brandId
+          (product) => product.brand?.id === data.brand?.id
         );
       }
-      if (data.categoryId) {
+      if (data.category?.id) {
         productsFiltered = productsFiltered.filter(
-          (product) => product.categoryId === data.categoryId
+          (product) => product.category?.id === data.category?.id
         );
       }
 

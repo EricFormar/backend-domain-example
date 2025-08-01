@@ -7,7 +7,7 @@ export interface BrandFindByIdDependencies {
 };
 
 export interface FindBrandByIdRequestModel {
-  id : string
+  id : number
 }
 
 export async function findBrandById(

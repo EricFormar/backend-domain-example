@@ -4,3 +4,4 @@ coverage/
 apps/backend/src/environments/.env.development
 apps/backend/src/environments/.env
 apps/backend/src/environments/.env.production
+dist/

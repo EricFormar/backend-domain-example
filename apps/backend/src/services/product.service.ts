@@ -29,7 +29,6 @@ export function productService(): ProductRepository {
   return {
     // Get all product
     findAll: async function () {
-      try {
         const products = await ProductModel.findAll({
           include : ["category", "brand"]
         });
@@ -39,63 +38,37 @@ export function productService(): ProductRepository {
           _mapToProductResponseDto(product)
         );
         return mappedProducts;
-      } catch (error) {
-        return error as Error;
-      }
     },
     // Get product by id
-    findById: async function (productId: string) {
-      try {
+    findById: async function (productId: number) {
         const product = await ProductModel.findByPk(productId);
-        if (!product)
-          throw createNotFoundError("No existe una marca con el ID " + productId);
-        return _mapToProductResponseDto(product);
-      } catch (error) {
-        return error as Error;
-      }
+        return product ? _mapToProductResponseDto(product) : null;
     },
     // Create product
     create: async function (product: Omit<Product, "id">) {
-      try {
         const newProduct = await ProductModel.create(product);
         return _mapToProductResponseDto(newProduct);
-      } catch (error) {
-        return error as Error;
-      }
     },
     // Update product
     update: async function (product: Product) {
-      try {
         const productToUpdate = await ProductModel.findByPk(product.id);
-        if (!productToUpdate)
-          throw createNotFoundError(
-            "No existe una marca con el ID " + product.id
-          );
+        if(productToUpdate){
         productToUpdate.update(product);
         const productUpdated = await productToUpdate.save();
         return _mapToProductResponseDto(productUpdated);
-      } catch (error) {
-        return error as Error;
-      }
+        }else {
+          return product
+        }
     },
     // Delete product
-    delete: async function (id: string) {
-      try {
+    delete: async function (id: number) {
         const productToDelete = await ProductModel.findByPk(id);
-        if (!productToDelete) {
-           throw createNotFoundError(
-            "No existe una marca con el ID " + id
-          );
-        }
-        await productToDelete.destroy();
+        productToDelete && await productToDelete.destroy();
         return;
-      } catch (error) {
-        return error as Error;
-      }
     },
     // Search products
     search: async function (product:Partial<Product>) {
-       try {
+
          const products = await ProductModel.findAll({
             where : {
                ...product
@@ -105,18 +78,11 @@ export function productService(): ProductRepository {
           _mapToProductResponseDto(product)
         );
         return mappedProducts;
-      } catch (error) {
-        return error as Error;
-      }
     },
       // Count products
     count: async function () {
-      try {
         const result = await ProductModel.count()
         return result;
-      } catch (error) {
-        return error as Error;
-      }
     },
   };
 }

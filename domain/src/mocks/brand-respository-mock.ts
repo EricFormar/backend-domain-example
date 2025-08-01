@@ -13,16 +13,15 @@ export function createBrandRepositoryMock(
     findAll: async function () {
       return this.brands;
     },
-    findById: async function (brandId: string) {
+    findById: async function (brandId: number) {
       const brand = this.brands.find((brand) => brand.id === brandId);
       return brand || null;
     },
     create: async function (brand: Omit<Brand, "id">): Promise<Brand> {
       const newBrand = {
-        id: "new-id",
+        id: 1,
         ...brand,
       };
-
       this.brands.push(newBrand);
       return newBrand;
     },
@@ -33,13 +32,11 @@ export function createBrandRepositoryMock(
       }
       return brand;
     },
-    delete: async function (brandId: string): Promise<boolean> {
+    delete: async function (brandId: number): Promise<void> {
       const index = this.brands.findIndex((b) => b.id === brandId);
       if (index !== -1) {
         this.brands.splice(index, 1);
-        return true;
       }
-      return false;
     },
     findByName: async function (name: string): Promise<Brand | null> {
       const brand = this.brands.find((brand) => brand.name === name);
