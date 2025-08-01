@@ -1,6 +1,6 @@
-import { ms } from "../../utils/ms";
 import { CryptoRepository } from "../repositories/crypto-repository";
 import {User} from '../entities/User';
+import { ms } from "../utils/ms";
 
 export function createCryptoServiceMock() : CryptoRepository {
     return {
