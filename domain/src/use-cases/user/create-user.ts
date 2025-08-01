@@ -20,7 +20,7 @@ export async function userCreate(
   if (existingUser) return createInvalidDataError("Email already in use");
 
   const user: User = {
-    id: crypto.randomUUID(),
+    id: "new-id",
     email,
     password,
     name,

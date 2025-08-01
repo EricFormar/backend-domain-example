@@ -6,13 +6,13 @@ export interface BrandUpdateDependencies {
   brandRepository: BrandRepository;
 }
 
-export interface BrandUpdtateRequestModel {
+export interface BrandUpdateRequestModel {
   brandToUpdate: Brand;
 }
 
 export async function updateBrand(
   { brandRepository }: BrandUpdateDependencies,
-  { brandToUpdate }: BrandUpdtateRequestModel
+  { brandToUpdate }: BrandUpdateRequestModel
 ): Promise<Brand | NotFoundError> {
   const brand = await brandRepository.findById(brandToUpdate.id);
   if (!brand) return createNotFoundError("Brand not found");

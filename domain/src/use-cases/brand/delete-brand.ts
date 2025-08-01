@@ -1,4 +1,3 @@
-import { createNotFoundError, NotFoundError } from "../../errors/error";
 import { BrandRepository } from "../../repositories/brand-repository";
 
 export interface DeleteBrandDependencies {
@@ -6,14 +5,13 @@ export interface DeleteBrandDependencies {
 }
 
 export interface DeleteBrandRequestModel {
-  id: string;
+  id: number;
 }
 
 export async function deleteBrand(
   { brandRepository }: DeleteBrandDependencies,
   { id }: DeleteBrandRequestModel
-): Promise<Boolean | NotFoundError > {
+): Promise<void> {
   const result = await brandRepository.delete(id);
-  if (!result) return createNotFoundError("Brand not found");
   return result;
 }
