@@ -1,5 +1,5 @@
 import { Category } from "../../entities/Category";
-import { createMissingDataError, createNotFoundError, NotFoundError } from "../../errors/error";
+import { createNotFoundError, NotFoundError } from "../../errors/error";
 import { CategoryRepository } from "../../repositories/category-repository";
 
 export interface CategoryFindByIdDependencies {
@@ -7,7 +7,7 @@ export interface CategoryFindByIdDependencies {
 }
 
 export interface CategoryFindByIdRequestModel {
-  id: string;
+  id: number;
 }
 
 export async function findCategoryById(

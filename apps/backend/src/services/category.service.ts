@@ -3,10 +3,12 @@ import { default as CategoryModel } from "../database/models/category";
 
 import { CategoryResponseDto } from "../dtos/category-response.dto";
 import { CategoryRepository } from "@project-example/domain/repositories/category-repository";
-
+import { createNotFoundError } from "@project-example/domain/errors/error";
 
 export function categoryService(): CategoryRepository {
-  const _mapToCategoryResponseDto = (category: CategoryModel): CategoryResponseDto => {
+  const _mapToCategoryResponseDto = (
+    category: CategoryModel
+  ): CategoryResponseDto => {
     return {
       id: category.id,
       name: category.name,
@@ -16,49 +18,57 @@ export function categoryService(): CategoryRepository {
   return {
     // Get all category
     findAll: async function () {
-        const categories = await CategoryModel.findAll();
-        const mappedCategory: Category[] = categories.map((category: CategoryModel) =>
-          _mapToCategoryResponseDto(category)
-        );
-        return mappedCategory;
-   
+      const categories = await CategoryModel.findAll();
+      const mappedCategory: Category[] = categories.map(
+        (category: CategoryModel) => _mapToCategoryResponseDto(category)
+      );
+      return mappedCategory;
     },
     // Get category by id
     findById: async function (categoryId: number) {
-        const category = await CategoryModel.findByPk(categoryId);
-        return category ? _mapToCategoryResponseDto(category) : null;
+      const category = await CategoryModel.findByPk(categoryId);
+      if (!category)
+        throw createNotFoundError(
+          "No existe una categoría con el ID " + categoryId
+        );
+      return _mapToCategoryResponseDto(category);
     },
     // Create category
     create: async function (category: Omit<Category, "id">) {
-        const newCategory = await CategoryModel.create(category);
-        return _mapToCategoryResponseDto(newCategory);
+      const newCategory = await CategoryModel.create(category);
+      return _mapToCategoryResponseDto(newCategory);
     },
     // Update category
     update: async function (category: Category) {
-     
-        const categoryToUpdate = await CategoryModel.findByPk(category.id);
-        if(categoryToUpdate){
-        categoryToUpdate.update(category);
-        const categoryUpdated = await categoryToUpdate.save();
-        return _mapToCategoryResponseDto(categoryUpdated);
-        }else {
-          return category
-        }
+      const categoryToUpdate = await CategoryModel.findByPk(category.id);
+      if (!categoryToUpdate)
+        throw createNotFoundError(
+          "No existe una categoría con el ID " + category.id
+        );
+      categoryToUpdate.update(category);
+      const categoryUpdated = await categoryToUpdate.save();
+      return _mapToCategoryResponseDto(categoryUpdated);
     },
     // Delete category
     delete: async function (id: number) {
-        const categoryToDelete = await CategoryModel.findByPk(id);
-        categoryToDelete && await categoryToDelete.destroy();
-        return;
+      const categoryToDelete = await CategoryModel.findByPk(id);
+       if (!categoryToDelete)
+        throw createNotFoundError(
+          "No existe una categoría con el ID " + id
+        );
+      categoryToDelete && (await categoryToDelete.destroy());
+      return;
     },
     // Find category by name
-    findByName: async function (name:string) {
-
-        const category = await CategoryModel.findOne({
-          where : {name}
-        });
-       
-        return category ?  _mapToCategoryResponseDto(category) : null;
-    }
+    findByName: async function (name: string) {
+      const category = await CategoryModel.findOne({
+        where: { name },
+      });
+      if (!category)
+        throw createNotFoundError(
+          "No existe una categoría con el nombre " + name
+        );
+      return _mapToCategoryResponseDto(category);
+    },
   };
 }

@@ -18,14 +18,13 @@ export async function brandCreate(
   if (existingBrand) return createInvalidDataError("Name already in use");
 
   const brand: Brand = {
-    id: "any-id",
+    id: 1,
     name,
     image,
   };
 
   return await brandRepository.create(brand);
 }
-
 
 function validateData(
   name: string

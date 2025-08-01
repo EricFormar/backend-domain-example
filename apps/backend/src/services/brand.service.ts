@@ -23,7 +23,11 @@ export function brandService(): BrandRepository {
     // Get brand by id
     findById: async function (brandId: number) {
       const brand = await BrandModel.findByPk(brandId);
-      return brand ? _mapToBrandResponseDto(brand) : null;
+      if (!brand)
+        throw createNotFoundError(
+          "No existe una marca con el ID " + brandId
+        );
+      return _mapToBrandResponseDto(brand)
     },
     // Create brand
     create: async function (brand: Omit<Brand, "id">) {
@@ -33,26 +37,33 @@ export function brandService(): BrandRepository {
     // Update brand
     update: async function (brand: Brand) {
       const brandToUpdate = await BrandModel.findByPk(brand.id);
-      if (brandToUpdate) {
-        brandToUpdate.update(brand);
-        const brandUpdated = await brandToUpdate.save();
-        return _mapToBrandResponseDto(brandUpdated);
-      } else {
-        return brand;
-      }
+      if (!brandToUpdate)
+        throw createNotFoundError(
+          "No existe una marca con el ID " + brand.id
+        );
+      brandToUpdate.update(brand);
+      const brandUpdated = await brandToUpdate.save();
+      return _mapToBrandResponseDto(brandUpdated);
     },
     // Delete brand
     delete: async function (id: number) {
       const brandToDelete = await BrandModel.findByPk(id);
-      brandToDelete && (await brandToDelete.destroy());
+      if (!brandToDelete) {
+        throw createNotFoundError(
+          "No existe una marca con el ID " + id
+        );
+      }
+      await brandToDelete.destroy();
       return;
     },
     // Find brand by name
     findByName: async function (name: string) {
       const brand = await BrandModel.findOne({
-        where: { name },
+        where: { name }
       });
-      return brand ? _mapToBrandResponseDto(brand) : null;
-    },
+      if (!brand)
+        throw createNotFoundError("No existe una marca con el nombre " + name);
+      return _mapToBrandResponseDto(brand);
+    }
   };
 }
