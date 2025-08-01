@@ -38,7 +38,7 @@ export function brandController() {
         const brand = await findBrandById({
           brandRepository : brandService()
         },{
-          id : brandId
+          id : +brandId
         });
 
         if (!brand) throw createNotFoundError("No existe una marca con el ID " + brandId);
