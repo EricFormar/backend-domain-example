@@ -19,7 +19,7 @@ export async function categoryCreate(
   if (existingBrand) return createInvalidDataError("Name already in use");
 
   const category: Category = {
-    id: "any-id",
+    id: 1,
     name,
     image,
   };
