@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { createBadRequestError, createInternalServerError } from "@domain/src/errors/error";
 import { categoryService } from "../services/category.service";
-import { Category } from "@domain/src/entities/Category";
+import { createBadRequestError, createInternalServerError } from "@project-example/domain/errors/error";
+import { Category } from "@project-example/domain/entities/Category";
 
 export function categoryController() {
 const service = categoryService();

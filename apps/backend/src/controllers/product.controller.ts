@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { createInternalServerError } from "@domain/src/errors/error";
 import { productService } from "../services/product.service";
-import { Product } from "@domain/src/entities/Product";
+import { createInternalServerError } from "@project-example/domain/errors/error";
+import { Product } from "@project-example/domain/entities/Product";
+
 
 export function productController() {
 const service = productService();

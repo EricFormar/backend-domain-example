@@ -1,8 +1,9 @@
 {
-  "name" : "backend-example",
+  "name" : "project-example",
+  "version": "1.0.0",
   "private" : true,
   "workspaces": [
-    "domain/*",
+    "domain",
     "apps/backend",
     "apps/frontend"
   ] ,

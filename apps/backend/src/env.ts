@@ -2,7 +2,7 @@ import {config} from 'dotenv';
 import path from 'path';
 
 type TypeMode = 'development' | 'production' | 'test';
-const mode : TypeMode = process.env.NODE_ENV as TypeMode || 'development';
+const mode : TypeMode = process.env.NODE_ENV as TypeMode || 'test';
 
 const envFile = `.env.${mode}`;
 config({ path: path.join(__dirname,'environments', envFile) });
@@ -12,7 +12,7 @@ export const {
     NODE_ENV,
     BASE_URL,
     DB_HOST,
-    DB_PORT,
+    DB_PORT = 'http://localhost:3000/api',
     DB_USERNAME,
     DB_PASSWORD,
     DB_NAME,

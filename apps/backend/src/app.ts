@@ -63,7 +63,7 @@ try {
   app.listen(PORT, () => {
     console.log(
       `Servidor corriendo en el puerto ${PORT} | MODO: ${
-        NODE_ENV ? NODE_ENV.toUpperCase() : "DEVELOPMENT (default)"
+        NODE_ENV ? NODE_ENV.toUpperCase() : "TEST (default)"
       }`
     );
   });

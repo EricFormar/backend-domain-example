@@ -1,11 +1,8 @@
-import { Brand } from "@domain/src/entities/Brand";
 import { default as BrandModel } from "../database/models/brand";
-
-import {
-  createNotFoundError,
-} from "@domain/src/errors/error";
-import { BrandRepository } from "@domain/src/repositories/brand-repository";
+import { BrandRepository } from "@project-example/domain/repositories/brand-repository";
 import { BrandResponseDto } from "../dtos/brand-response.dto";
+import { Brand } from "@project-example/domain/entities/Brand";
+import { createNotFoundError } from "@project-example/domain/errors/error";
 
 
 export function brandService(): BrandRepository {

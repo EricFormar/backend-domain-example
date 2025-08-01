@@ -1,11 +1,10 @@
-import { Product } from "@domain/src/entities/Product";
+import { ProductRepository } from "@project-example/domain/repositories/product-repository";
 import { default as ProductModel } from "../database/models/product";
 
-import {
-  createNotFoundError,
-} from "@domain/src/errors/error";
-import { ProductRepository } from "@domain/src/repositories/product-repository";
+
 import { ProductResponseDto } from "../dtos/product-response.dto";
+import { Product } from "@project-example/domain/entities/Product";
+import { createNotFoundError } from "@project-example/domain/errors/error";
 
 
 export function productService(): ProductRepository {
@@ -31,7 +30,11 @@ export function productService(): ProductRepository {
     // Get all product
     findAll: async function () {
       try {
-        const products = await ProductModel.findAll();
+        const products = await ProductModel.findAll({
+          include : ["category", "brand"]
+        });
+        console.log(products);
+        
         const mappedProducts: Product[] = products.map((product: ProductModel) =>
           _mapToProductResponseDto(product)
         );
