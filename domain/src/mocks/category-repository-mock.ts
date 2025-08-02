@@ -13,12 +13,16 @@ export function createCategoryRepositoryMock(
     findAll: async function () {
       return this.categories;
     },
-    findById: async function (id: number) {
+    findById: async function (id: string) {
       return this.categories.find((category) => category.id === id) || null;
     },
-    create: async function (category: Category) {
-      this.categories.push(category);
-      return category;
+    create: async function (category: Omit<Category, "id">) {
+       const newCategory  = {
+        id: "new-id",
+        ...category,
+      };
+      this.categories.push(newCategory);
+      return newCategory;
     },
     update: async function (category: Category) {
       const index = this.categories.findIndex((c) => c.id === category.id);
@@ -27,7 +31,7 @@ export function createCategoryRepositoryMock(
       }
       return category;
     },
-    delete: async function (id: number) {
+    delete: async function (id: string) {
       const index = this.categories.findIndex((c) => c.id === id);
       if (index !== -1) {
         this.categories.splice(index, 1);
