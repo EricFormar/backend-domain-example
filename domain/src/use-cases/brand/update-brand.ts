@@ -15,7 +15,7 @@ export async function updateBrand(
   { brandToUpdate }: BrandUpdateRequestModel
 ): Promise<Brand | NotFoundError> {
   const brand = await brandRepository.findById(brandToUpdate.id);
-  if (!brand) return createNotFoundError("Brand not found");
+  if (!brand) throw createNotFoundError("Brand not found");
   const updatedBrand = await brandRepository.update(brandToUpdate);
 
   return updatedBrand;
