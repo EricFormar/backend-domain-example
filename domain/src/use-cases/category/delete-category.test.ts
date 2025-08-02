@@ -23,14 +23,13 @@ describe("Delete category", () => {
   test("should get category by id", async () => {
     const categoryId = "any-id";
     const result = await deleteCategory(_dependencies, { id: categoryId });
-    expect(result).toBe(true);
+    expect(result).toBeUndefined();
   });
 
   test("should throw error when category id does not exist", async () => {
     const categoryId = "non-exist-id";
-    const result = await deleteCategory(_dependencies, {
+    await expect(deleteCategory(_dependencies, {
       id: categoryId,
-    });
-    expect(result).toEqual(createNotFoundError("Category not found"));
+    })).rejects.toThrow("Category not found");
   });
 });

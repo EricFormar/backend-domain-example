@@ -27,7 +27,7 @@ describe("Create Category", () => {
     const result = await categoryCreate(_dependencies, payload)
 
     expect(result).toEqual({
-      id: "any-id",
+      id: "new-id",
       name: "new-brand",
       image: "any-image",
     });
