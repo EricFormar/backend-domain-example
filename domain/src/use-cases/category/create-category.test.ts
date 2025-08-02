@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, test } from "vitest";
 import { createCategoryRepositoryMock, MockedCategoryRepository } from "../../mocks/category-repository-mock";
 import { createCategoryMock } from "../../mocks/category-mock";
 import { categoryCreate, CategoryCreateDependencies, CategoryCreateRequestModel } from "./create-category";
@@ -7,6 +7,7 @@ describe("Create Category", () => {
   const _mockedCategoryRepository : MockedCategoryRepository= createCategoryRepositoryMock([
     createCategoryMock({id: "any-id"}),
     createCategoryMock({id: "other-id"}),
+    createCategoryMock({id: "exist-id", name: "exist-name"}),
   ]);
 
   let _dependencies : CategoryCreateDependencies;
@@ -17,6 +18,15 @@ describe("Create Category", () => {
     }
   })
 
+  test("should throw error when name already exists", async () => {
+    const payload : CategoryCreateRequestModel = {
+      name: "exist-name",
+      image: "any-image",
+    };
+    await expect(categoryCreate(_dependencies, payload)).rejects.toThrow(
+      "Name already in use"
+    );
+  });
 
   it("should create new brand successfully", async () => {
     const payload : CategoryCreateRequestModel = {
