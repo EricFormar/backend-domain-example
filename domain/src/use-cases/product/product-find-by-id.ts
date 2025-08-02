@@ -7,7 +7,7 @@ export interface ProductFindByIdDependencies {
 }
 
 export interface ProductFindByIdRequestModel {
-  id: number;
+  id: string;
 }
 
 export async function findProductById(
@@ -15,6 +15,6 @@ export async function findProductById(
   { id }: ProductFindByIdRequestModel
 ): Promise<Product | NotFoundError > {
   const product = await productRepository.findById(id);
-  if (!product) return createNotFoundError("Product not found");
+  if (!product) throw createNotFoundError("Product not found");
   return product;
 }
