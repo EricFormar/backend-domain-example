@@ -13,10 +13,10 @@ export async function categoryCreate(
   { name, image }: CategoryCreateRequestModel
 ): Promise<InvalidDataError | Category> {
   const hasErrors = validateData(name)
-  if(hasErrors) return hasErrors;
+  if(hasErrors) throw hasErrors;
   
   const existingBrand = await categoryRepository.findByName(name);
-  if (existingBrand) return createInvalidDataError("Name already in use");
+  if (existingBrand) throw createInvalidDataError("Name already in use");
 
   const category : Omit<Category, "id"> = {
     name,

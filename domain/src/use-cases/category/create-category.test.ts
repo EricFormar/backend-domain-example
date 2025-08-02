@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { createCategoryRepositoryMock, MockedCategoryRepository } from "../../mocks/category-repository-mock";
 import { createCategoryMock } from "../../mocks/category-mock";
 import { categoryCreate, CategoryCreateDependencies, CategoryCreateRequestModel } from "./create-category";
-import { createInvalidDataError } from "../../errors/error";
 
 describe("Create Category", () => {
   const _mockedCategoryRepository : MockedCategoryRepository= createCategoryRepositoryMock([
@@ -37,8 +36,9 @@ describe("Create Category", () => {
     const payload = {
       name: "",
     };
-    const result = await categoryCreate(_dependencies, payload)
-    expect(result).toEqual(createInvalidDataError("Name must be not empty"));
+    await expect(categoryCreate(_dependencies, payload)).rejects.toThrow(
+      "Name must be not empty"
+    );
 
   });
 
@@ -47,9 +47,8 @@ describe("Create Category", () => {
       name: "a".repeat(21),
     };
 
-    const result = await categoryCreate(_dependencies, payload)    
-    expect(result).toEqual(createInvalidDataError(
-      "Name cannot be longer than 20 characters")
+    await expect(categoryCreate(_dependencies, payload)).rejects.toThrow(
+      "Name cannot be longer than 20 characters"
     );
   });
 });
