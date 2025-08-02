@@ -10,7 +10,7 @@ export function categoryService(): CategoryRepository {
     category: CategoryModel
   ): CategoryResponseDto => {
     return {
-      id: category.id,
+      id: category.id.toString(),
       name: category.name,
       image: category.image,
     };
@@ -25,7 +25,7 @@ export function categoryService(): CategoryRepository {
       return mappedCategory;
     },
     // Get category by id
-    findById: async function (categoryId: number) {
+    findById: async function (categoryId: string) {
       const category = await CategoryModel.findByPk(categoryId);
       if (!category)
         throw createNotFoundError(
@@ -50,7 +50,7 @@ export function categoryService(): CategoryRepository {
       return _mapToCategoryResponseDto(categoryUpdated);
     },
     // Delete category
-    delete: async function (id: number) {
+    delete: async function (id: string) {
       const categoryToDelete = await CategoryModel.findByPk(id);
        if (!categoryToDelete)
         throw createNotFoundError(

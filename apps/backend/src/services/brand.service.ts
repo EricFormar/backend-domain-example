@@ -7,7 +7,7 @@ import { createNotFoundError } from "@project-example/domain/errors/error";
 export function brandService(): BrandRepository {
   const _mapToBrandResponseDto = (brand: BrandModel): BrandResponseDto => {
     return {
-      id: brand.id,
+      id: brand.id.toString(),
       name: brand.name,
       image: brand.image,
     };
@@ -22,7 +22,7 @@ export function brandService(): BrandRepository {
       return mappedBrands;
     },
     // Get brand by id
-    findById: async function (brandId: number) {
+    findById: async function (brandId: string) {
       const brand = await BrandModel.findByPk(brandId);
       if (!brand)
         throw createNotFoundError(
@@ -47,7 +47,7 @@ export function brandService(): BrandRepository {
       return _mapToBrandResponseDto(brandUpdated);
     },
     // Delete brand
-    delete: async function (id: number) {
+    delete: async function (id: string) {
       const brandToDelete = await BrandModel.findByPk(id);
       if (!brandToDelete) {
         throw createNotFoundError(
