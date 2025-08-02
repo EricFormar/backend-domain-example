@@ -6,13 +6,15 @@ export interface DeleteCategoryDependencies {
 }
 
 export interface DeleteCategoryRequestModel {
-  id: number;
+  id: string;
 }
 
 export async function deleteCategory(
   { categoryRepository }: DeleteCategoryDependencies,
   { id }: DeleteCategoryRequestModel
 ): Promise<void> {
+  const category = await categoryRepository.findById(id);
+  if (!category) throw createNotFoundError("Category not found");
   await categoryRepository.delete(id);
   return;
 }

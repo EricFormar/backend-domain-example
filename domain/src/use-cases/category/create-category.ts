@@ -18,8 +18,7 @@ export async function categoryCreate(
   const existingBrand = await categoryRepository.findByName(name);
   if (existingBrand) return createInvalidDataError("Name already in use");
 
-  const category: Category = {
-    id: 1,
+  const category : Omit<Category, "id"> = {
     name,
     image,
   };

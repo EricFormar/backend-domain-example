@@ -7,7 +7,7 @@ export interface CategoryFindByIdDependencies {
 }
 
 export interface CategoryFindByIdRequestModel {
-  id: number;
+  id: string;
 }
 
 export async function findCategoryById(
