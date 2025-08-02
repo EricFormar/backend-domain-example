@@ -25,17 +25,24 @@ export class AppError extends Error {
 /**
  * Interface for errors indicating that provided data is invalid. (HTTP 400)
  */
-export interface InvalidDataError extends AppError {
-    name: 'InvalidDataError'; // Literal type for precise identification
-    httpStatus: 400;
+export class InvalidDataError extends AppError {
+    public readonly name: 'InvalidDataError' = 'InvalidDataError';
+    public readonly httpStatus: 400 = 400;
+    constructor(message?: string) {
+        super(message || 'Invalid data provided');
+    }
 }
 
 /**
  * Interface for errors indicating that a resource was not found. (HTTP 404)
  */
-export interface NotFoundError extends AppError {
-    name: 'NotFoundError';
-    httpStatus: 404;
+export class NotFoundError extends AppError {
+    public readonly name: 'NotFoundError' = 'NotFoundError';
+    public readonly httpStatus: 404 = 404;
+
+    constructor(message?: string) {
+        super(message || 'Recurso no encontrado');
+    }
 }
 
 /**
@@ -85,21 +92,17 @@ export interface InternalServerError extends AppError {
  * Creates an InvalidDataError.
  * @param message An optional custom message for the error. Defaults to 'Invalid data provided.'
  */
-export const createInvalidDataError = (message: string = 'Invalid data provided.'): InvalidDataError => ({
-    name: 'InvalidDataError',
-    message,
-    httpStatus: 400,
-});
+export const createInvalidDataError = (message: string = 'Invalid data provided.'): InvalidDataError => {
+   return new InvalidDataError(message);
+};
 
 /**
  * Creates a NotFoundError.
  * @param message An optional custom message for the error. Defaults to 'Resource not found.'
  */
-export const createNotFoundError = (message: string = 'Resource not found.'): NotFoundError => ({
-    name: 'NotFoundError',
-    message,
-    httpStatus: 404,
-});
+export const createNotFoundError = (message: string = "Resource not found"): NotFoundError => {
+    return new NotFoundError(message);
+};
 
 /**
  * Creates a BadRequestError.
