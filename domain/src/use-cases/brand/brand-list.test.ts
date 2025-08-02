@@ -7,8 +7,8 @@ describe('List Brands', async () => {
 
     test('Given any user, list the brands', async () => {
         const brandRepository: MockedBrandRepository = createBrandRepositoryMock([
-            createBrandMock({ id: "any-id" }),
-            createBrandMock({ id: "other-id" })
+            createBrandMock({ id: 1 }),
+            createBrandMock({ id: 2 })
         ]);
 
         const result = await listBrands({ brandRepository });
