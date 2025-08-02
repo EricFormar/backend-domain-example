@@ -30,9 +30,8 @@ describe("Update Product", () => {
 
   test("should throw error when product id does not exist", async () => {
     const productToUpdate = createProductMock({ id: "non-exist-id", name: "update-name" , description : "update-description"});
-    const result = await updateProduct(_dependencies, {
+    await expect(updateProduct(_dependencies, {
       productToUpdate,
-    });
-    expect(result).toEqual(createNotFoundError("Product not found"));
+    })).rejects.toThrow("Product not found")
   });
 });

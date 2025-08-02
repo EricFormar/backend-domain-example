@@ -30,15 +30,19 @@ describe("Create Product", () => {
     const payload: ProductCreateRequestModel = {
       name: "new-product",
       description: "new-description",
+      image : "any-image",
+      discount : 0,
       price: 100,
     };
     const result = await productCreate(_dependencies, payload);
 
     expect(result).toEqual({
-      id: "any-id",
-      name: "new-product",
-      description: "new-description",
-      price: 100,
+      id: "new-id",
+      name: payload.name,
+      description: payload.description,
+      price: payload.price,
+      image : payload.image,
+      discount : payload.discount,
     });
   });
 
@@ -46,6 +50,8 @@ describe("Create Product", () => {
     const payload = {
       name: "",
       description: "new-description",
+      image : "any-image",
+      discount : 0,
       price: 100,
     };
     const result = await productCreate(_dependencies, payload);
@@ -56,6 +62,8 @@ describe("Create Product", () => {
     const payload = {
       name: "a".repeat(21),
       description: "new-description",
+      image : "any-image",
+      discount : 0,
       price: 100,
     };
 
@@ -69,6 +77,8 @@ describe("Create Product", () => {
     const payload = {
       name: "any-name",
       description: "a".repeat(501),
+      image : "any-image",
+      discount : 0,
       price: 100,
     };
 
@@ -78,10 +88,12 @@ describe("Create Product", () => {
     );
   });
 
-   it("should throw an error when the price is less than or equal to 0", async () => {
+  it("should throw an error when the price is less than or equal to 0", async () => {
     const payload = {
       name: "new-product",
       description: "new-description",
+      image : "any-image",
+      discount : 0,
       price: 0,
     };
     const result = await productCreate(_dependencies, payload);

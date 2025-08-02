@@ -23,14 +23,13 @@ describe("Delete product", () => {
   test("should get product by id", async () => {
     const productId = "any-id";
     const result = await deleteProduct(_dependencies, { id: productId });
-    expect(result).toBe(true);
+    expect(result).toBeUndefined();
   });
 
   test("should throw error when product id does not exist", async () => {
     const productId = "non-exist-id";
-    const result = await deleteProduct(_dependencies, {
+    await expect(deleteProduct(_dependencies, {
       id: productId,
-    });
-    expect(result).toEqual(createNotFoundError("Product not found"));
+    })).rejects.toThrow("Product not found")
   });
 });
