@@ -6,6 +6,6 @@ export interface ProductRepository {
     create(product: Omit<Product, 'id'>): Promise<Product>;
     update(product: Partial<Product>): Promise<Product> ;
     delete(id: string): Promise<void>;
-    search(data: Partial<Product>): Promise<Product[] | null>;
+    search(data: Partial<Product>): Promise<Product[]>;
     count(): Promise<number>;
 }
