@@ -13,18 +13,36 @@ import {
 describe("Search products", async () => {
   const _mockedProductRepository: MockedProductRepository =
     createProductRepositoryMock([
-      createProductMock({ id: "any-id", name: "any-product", price: 100 }),
-      createProductMock({ id: "other-id", name: "other-product", price: 200 }),
-      createProductMock({ id: "other-id", name: "other-product", price: 300 }),
       createProductMock({
-        id: "other-id",
-        description: "some-description",
-        price: 200,
+        id: "any-id",
+        name: "any-product",
+        price: 100,
+        category: { id: "any-category-id", name: "any-category-name" },
+        brand: { id: "any-brand-id", name: "any-brand-name" },
       }),
       createProductMock({
         id: "other-id",
+        name: "other-product",
+        price: 200,
+        category: { id: "other-category-id", name: "other-category-name" },
+      }),
+      createProductMock({
+        id: "other-id",
+        name: "other-product",
+        price: 300,
+        category: { id: "other-category-id", name: "other-category-name" },
+      }),
+      createProductMock({
+        id: "some-id",
+        description: "some-description",
+        price: 200,
+        brand: { id: "some-brand-id", name: "some-brand-name" },
+      }),
+      createProductMock({
+        id: "some-id",
         description: "some-description",
         price: 300,
+        brand: { id: "some-brand-id", name: "some-brand-name" },
       }),
     ]);
 
@@ -37,10 +55,10 @@ describe("Search products", async () => {
   });
 
   test("Should search for products by name", async () => {
-    const search : SearchProductRequestModel = {
-      dataToSearch : {
+    const search: SearchProductRequestModel = {
+      dataToSearch: {
         name: "other",
-      }
+      },
     };
     const result = await searchProducts(_dependencies, search);
     expect(result).toBeDefined();
@@ -52,10 +70,10 @@ describe("Search products", async () => {
   });
 
   test("should search for products by description", async () => {
-   const search : SearchProductRequestModel = {
-      dataToSearch : {
+    const search: SearchProductRequestModel = {
+      dataToSearch: {
         description: "some",
-      }
+      },
     };
     const result = await searchProducts(_dependencies, search);
     expect(result).toBeDefined();
@@ -63,6 +81,36 @@ describe("Search products", async () => {
     expect(result).toEqual([
       _mockedProductRepository.products[3],
       _mockedProductRepository.products[4],
+    ]);
+  });
+
+  test("should search for products by brand", async () => {
+    const search: SearchProductRequestModel = {
+      dataToSearch: {
+        brand: { id: "some-brand-id", name: "some-brand-name" },
+      },
+    };
+    const result = await searchProducts(_dependencies, search);
+    expect(result).toBeDefined();
+    expect(result.length).toBe(2);
+    expect(result).toEqual([
+      _mockedProductRepository.products[3],
+      _mockedProductRepository.products[4],
+    ]);
+  });
+
+  test("should search for products by category", async () => {
+    const search: SearchProductRequestModel = {
+      dataToSearch: {
+        category: { id: "other-category-id", name: "other-category-name" },
+      },
+    };
+    const result = await searchProducts(_dependencies, search);
+    expect(result).toBeDefined();
+    expect(result.length).toBe(2);
+    expect(result).toEqual([
+      _mockedProductRepository.products[1],
+      _mockedProductRepository.products[2],
     ]);
   });
 });
