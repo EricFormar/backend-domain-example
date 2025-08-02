@@ -6,7 +6,7 @@ export interface DeleteBrandDependencies {
 }
 
 export interface DeleteBrandRequestModel {
-  id: number;
+  id: string;
 }
 
 export async function deleteBrand(

@@ -7,17 +7,14 @@ export interface BrandFindByIdDependencies {
 };
 
 export interface FindBrandByIdRequestModel {
-  id : number
+  id : string 
 }
 
 export async function findBrandById(
   {brandRepository} : BrandFindByIdDependencies,
   {id} : FindBrandByIdRequestModel
 ) : Promise<Brand | NotFoundError> {
-    
     const brand = await brandRepository.findById(id);      
-    if(!brand) return createNotFoundError("Brand not found")
-
+    if(!brand) throw createNotFoundError("Brand not found")
     return brand 
-    
 }
