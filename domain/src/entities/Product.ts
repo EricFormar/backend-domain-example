@@ -2,7 +2,7 @@ import { Brand } from "./Brand";
 import { Category } from "./Category";
 
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   description: string;
   image : string;
