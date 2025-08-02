@@ -5,8 +5,8 @@ import { Product } from "@project-example/domain/entities/Product";
 import { listProducts } from "@project-example/domain/use-cases/product/product-list";
 import { findProductById } from "@project-example/domain/use-cases/product/product-find-by-id";
 import { productCreate } from "@project-example/domain/use-cases/product/create-product";
-import { productUpdate } from "@project-example/domain/use-cases/product/update-product";
-import { productDelete } from "@project-example/domain/use-cases/product/delete-product";
+import { updateProduct } from "@project-example/domain/use-cases/product/update-product";
+import { deleteProduct } from "@project-example/domain/use-cases/product/delete-product";
 
 export function productController() {
   return {
@@ -34,11 +34,11 @@ export function productController() {
     // Get product by id
     getProductById: async (req: Request, res: Response) => {
       try {
-        const { productId } = req.params;
+        const { id } = req.params;
         const product = await findProductById({
           productRepository: productService()
         }, {
-          id: Number(productId),
+          id,
         })
         return res.status(200).json({
           ok: true,
@@ -88,7 +88,7 @@ export function productController() {
     updateProduct: async (req: Request, res: Response) => {
       try {
         const product: Product = { ...req.body, id: req.params.productId }
-        const updatedProduct = await productUpdate({
+        const updatedProduct = await updateProduct({
           productRepository: productService(),
         }, {
           productToUpdate: product
@@ -111,11 +111,11 @@ export function productController() {
     // Delete product
     deleteProduct: async (req: Request, res: Response) => {
       try {
-        const { productId } = req.params;
-        await productDelete({
+        const { id } = req.params;
+        await deleteProduct({
           productRepository: productService(),
         }, {
-          id: Number(productId),
+          id,
         })
         return res.status(200).json({
           ok: true,

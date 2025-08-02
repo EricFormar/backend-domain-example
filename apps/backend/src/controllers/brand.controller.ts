@@ -26,9 +26,11 @@ export function brandController() {
         });
       } catch (e) {
         const error =
-          createInternalServerError(
-            "Upss, hubo un error al obtener las marcas"
-          ) || e;
+          e instanceof AppError
+            ? e
+            : createInternalServerError(
+                "Upss, hubo un error al obtener las marcas"
+              );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
@@ -44,7 +46,7 @@ export function brandController() {
             brandRepository: brandService(),
           },
           {
-            id: +brandId,
+            id: brandId,
           }
         );
 
@@ -52,25 +54,17 @@ export function brandController() {
           ok: true,
           data: brand,
         });
-      } catch (e: any) {
-        if (e.httpStatus) {
-          // Si es un AppError, podemos usar directamente sus propiedades
-          return res.status(e.httpStatus).json({
-            ok: false,
-            message: e.message,
-          });
-        } else {
-          // Si no es un AppError, es un error inesperado.
-          // Registra el error original para fines de depuración (¡importante!).
-          // Crea un error genérico de servidor interno para el cliente.
-          const internalError = createInternalServerError(
-            "Upss, hubo un error al obtener la marca"
-          );
-          return res.status(internalError.httpStatus).json({
-            ok: false,
-            message: internalError.message,
-          });
-        }
+      } catch (e) {
+        const error =
+          e instanceof AppError
+            ? e
+            : createInternalServerError(
+                "Upss, hubo un error al crear una nueva marca"
+              );
+        return res.status(error.httpStatus).json({
+          ok: false,
+          message: error.message,
+        });
       }
     },
     // Create brand
@@ -97,9 +91,11 @@ export function brandController() {
         });
       } catch (e) {
         const error =
-          createInternalServerError(
-            "Upss, hubo un error al crear una nueva marca"
-          ) || e;
+          e instanceof AppError
+            ? e
+            : createInternalServerError(
+                "Upss, hubo un error al crear una nueva marca"
+              );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
@@ -124,9 +120,11 @@ export function brandController() {
         });
       } catch (e) {
         const error =
-          createInternalServerError(
-            "Upss, hubo un error al actualizar una nueva marca"
-          ) || e;
+          e instanceof AppError
+            ? e
+            : createInternalServerError(
+                "Upss, hubo un error al actualizar una nueva marca"
+              );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
@@ -142,7 +140,7 @@ export function brandController() {
             brandRepository: brandService(),
           },
           {
-            id: +brandId,
+            id: brandId,
           }
         );
         return res.status(200).json({
@@ -150,9 +148,11 @@ export function brandController() {
         });
       } catch (e) {
         const error =
-          createInternalServerError(
-            "Upss, hubo un error al eliminar la marca"
-          ) || e;
+          e instanceof AppError
+            ? e
+            : createInternalServerError(
+                "Upss, hubo un error al eliminar la marca"
+              );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,

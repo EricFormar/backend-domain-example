@@ -38,7 +38,7 @@ export function categoryController() {
         const category = await findCategoryById({
           categoryRepository: categoryService()
         }, {
-          id: Number(id)
+          id
         })
         return res.status(200).json({
           ok: true,
@@ -112,11 +112,11 @@ export function categoryController() {
     // Delete category
     deleteCategory: async (req: Request, res: Response) => {
       try {
-        const { categoryId } = req.params;
+        const { id } = req.params;
         await deleteCategory({
           categoryRepository: categoryService()
         },{
-          id: Number(categoryId)
+          id
         })
         return res.status(200).json({
           ok: true,
