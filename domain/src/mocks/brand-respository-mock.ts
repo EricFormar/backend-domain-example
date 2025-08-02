@@ -13,13 +13,13 @@ export function createBrandRepositoryMock(
     findAll: async function () {
       return this.brands;
     },
-    findById: async function (brandId: number) {
+    findById: async function (brandId: string) {
       const brand = this.brands.find((brand) => brand.id === brandId);
       return brand || null;
     },
     create: async function (brand: Omit<Brand, "id">): Promise<Brand> {
       const newBrand = {
-        id: 1,
+        id: "new-id",
         ...brand,
       };
       this.brands.push(newBrand);
@@ -32,7 +32,7 @@ export function createBrandRepositoryMock(
       }
       return brand;
     },
-    delete: async function (brandId: number): Promise<void> {
+    delete: async function (brandId: string): Promise<void> {
       const index = this.brands.findIndex((b) => b.id === brandId);
       if (index !== -1) {
         this.brands.splice(index, 1);
