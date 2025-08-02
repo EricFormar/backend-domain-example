@@ -12,7 +12,7 @@ export async function productCreate(
   { name, description, price, image, discount }: ProductCreateRequestModel
 ): Promise<InvalidDataError | Product> {
   const hasErrors = validateData(name, description, price);
-  if (hasErrors) return hasErrors;
+  if (hasErrors) throw hasErrors;
 
   const product: Omit<Product, "id"> = {
     name,
@@ -44,10 +44,6 @@ function validateData(
 
   if (description.trim().length > 500) {
     return createInvalidDataError("Description cannot be longer than 500 characters");
-  }
-
-   if (price === null) {
-    return createInvalidDataError("Price must be not empty");
   }
 
   if (price <= 0) {

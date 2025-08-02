@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, test } from "vitest";
-import { createInvalidDataError } from "../../errors/error";
 import {
   createProductRepositoryMock,
   MockedProductRepository,
@@ -54,9 +53,23 @@ describe("Create Product", () => {
       discount : 0,
       price: 100,
     };
-    const result = await productCreate(_dependencies, payload);
-    expect(result).toEqual(createInvalidDataError("Name must be not empty"));
+    await expect(productCreate(_dependencies, payload)).rejects.toThrow(
+      "Name must be not empty"
+    );
   });
+
+  it("should throw error when description is empty", async() => {
+    const payload = {
+      name: "any-name",
+      description: "",
+      image : "any-image",
+      discount : 0,
+      price: 100,
+    };
+    await expect(productCreate(_dependencies, payload)).rejects.toThrow(
+      "Description must be not empty"
+    );
+  })
 
   it("should throw error when name is too long", async () => {
     const payload = {
@@ -67,9 +80,8 @@ describe("Create Product", () => {
       price: 100,
     };
 
-    const result = await productCreate(_dependencies, payload);
-    expect(result).toEqual(
-      createInvalidDataError("Name cannot be longer than 20 characters")
+    await expect(productCreate(_dependencies, payload)).rejects.toThrow(
+      "Name cannot be longer than 20 characters"
     );
   });
 
@@ -82,9 +94,8 @@ describe("Create Product", () => {
       price: 100,
     };
 
-    const result = await productCreate(_dependencies, payload);
-    expect(result).toEqual(
-      createInvalidDataError("Description cannot be longer than 500 characters")
+    await expect(productCreate(_dependencies, payload)).rejects.toThrow(
+      "Description cannot be longer than 500 characters"
     );
   });
 
@@ -96,7 +107,9 @@ describe("Create Product", () => {
       discount : 0,
       price: 0,
     };
-    const result = await productCreate(_dependencies, payload);
-    expect(result).toEqual(createInvalidDataError("Price must be greater than zero"));
+    await expect(productCreate(_dependencies, payload)).rejects.toThrow(
+      "Price must be greater than zero"
+    );
   });
+  
 });
