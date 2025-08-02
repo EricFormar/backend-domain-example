@@ -1,4 +1,4 @@
-import { default as BrandModel } from "../database/models/brand";
+import BrandModel from "../database/models/brand";
 import { BrandRepository } from "@project-example/domain/repositories/brand-repository";
 import { BrandResponseDto } from "../dtos/brand-response.dto";
 import { Brand } from "@project-example/domain/entities/Brand";
@@ -16,9 +16,9 @@ export function brandService(): BrandRepository {
     // Get all brand
     findAll: async function () {
       const brands = await BrandModel.findAll();
-      const mappedBrands: Brand[] = brands.map((brand: BrandModel) =>
+      const mappedBrands: BrandResponseDto[] = brands.map((brand: BrandModel) =>
         _mapToBrandResponseDto(brand)
-      );
+      );      
       return mappedBrands;
     },
     // Get brand by id
