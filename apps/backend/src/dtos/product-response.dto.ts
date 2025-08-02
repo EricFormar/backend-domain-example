@@ -1,10 +1,8 @@
-import { Brand } from "@domain/src/entities/Brand";
-import { Category } from "@domain/src/entities/Category";
 import { BrandResponseDto } from "./brand-response.dto";
 import { CategoryResponseDto } from "./category-response.dto";
 
 export interface ProductResponseDto {
-  id: number;
+  id: string;
   name: string;
   image: string;
   price: number;
