@@ -12,12 +12,16 @@ export function createProductRepositoryMock(
     findAll: async function () {
       return this.products;
     },
-    findById: async function (id: number): Promise<Product | null> {
+    findById: async function (id: string): Promise<Product | null> {
       return this.products.find((product) => product.id === id) || null;
     },
-    create: async function (product: Product) {
-      this.products.push(product);
-      return product;
+    create: async function (product: Omit<Product, "id">) {
+      const newProduct = {
+        id : "new-id",
+        ...product
+      }
+      this.products.push(newProduct);
+      return newProduct;
     },
     update: async function (product: Product) {
       const index = this.products.findIndex((p) => p.id === product.id);
@@ -26,7 +30,7 @@ export function createProductRepositoryMock(
       }
       return this.products[index]
     },
-    delete: async function (id: number) {
+    delete: async function (id: string) {
       const index = this.products.findIndex((product) => product.id === id);
       if (index !== -1) {
         this.products.splice(index, 1);
