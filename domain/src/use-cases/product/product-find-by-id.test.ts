@@ -1,9 +1,15 @@
 import { beforeEach, describe, expect, test } from "vitest";
 
 import { createNotFoundError } from "../../errors/error";
-import { createProductRepositoryMock, MockedProductRepository } from "../../mocks/product-repository-mock";
+import {
+  createProductRepositoryMock,
+  MockedProductRepository,
+} from "../../mocks/product-repository-mock";
 import { createProductMock } from "../../mocks/product-mock";
-import { findProductById, ProductFindByIdDependencies } from "./product-find-by-id";
+import {
+  findProductById,
+  ProductFindByIdDependencies,
+} from "./product-find-by-id";
 
 describe("Find Product by ID", () => {
   const _mockedProductRepository: MockedProductRepository =
@@ -29,9 +35,10 @@ describe("Find Product by ID", () => {
 
   test("should throw error when product id does not exist", async () => {
     const productId = "non-exist-id";
-    const result = await findProductById(_dependencies, {
-      id: productId,
-    });
-    expect(result).toEqual(createNotFoundError("Product not found"));
+    await expect(
+      findProductById(_dependencies, {
+        id: productId,
+      })
+    ).rejects.toThrow("Product not found");
   });
 });
