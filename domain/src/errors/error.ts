@@ -2,10 +2,22 @@
  * Base application error interface. All custom errors should extend this.
  * It extends the native Error interface to ensure compatibility with standard error handling.
  */
-export interface AppError extends Error {
-    name: string; // The specific name of the error (e.g., 'InvalidDataError')
-    message: string; // A human-readable error message
-    httpStatus?: number; // Optional HTTP status code associated with the error
+export class AppError extends Error {
+    public name: string; // El nombre específico del error (ej. 'InvalidDataError')
+    public message: string; // Un mensaje de error legible para humanos
+    public httpStatus: number; // Código de estado HTTP opcional asociado con el error
+
+    constructor(message: string, name: string = 'AppError', httpStatus: number = 500) {
+        super(message); // Llama al constructor de la clase Error padre
+
+        // Establece el prototipo explícitamente para asegurar que instanceof funcione correctamente
+        // Esto es una buena práctica al extender clases nativas como Error
+        Object.setPrototypeOf(this, AppError.prototype);
+
+        this.name = name;
+        this.message = message; // Aunque Error ya tiene 'message', es bueno ser explícito
+        this.httpStatus = httpStatus;
+    }
 }
 
 // --- Specific Error Interfaces ---
