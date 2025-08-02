@@ -9,8 +9,8 @@ import { createBrandMock } from "../../mocks/brand-mock";
 describe("Update Brand", () => {
   const _mockedBrandRepository: MockedBrandRepository =
     createBrandRepositoryMock([
-      createBrandMock({ id: "any-id", name: "any-name" }),
-      createBrandMock({ id: "other-id" }),
+      createBrandMock({ id: 1, name: "any-name" }),
+      createBrandMock({ id: 2 }),
     ]);
 
   let _dependencies: BrandUpdateDependencies;
@@ -22,7 +22,7 @@ describe("Update Brand", () => {
   });
 
   test("should update a brand", async () => {
-    const brandToUpdate = createBrandMock({ id: "any-id", name: "update-name", image : "update-image"});
+    const brandToUpdate = createBrandMock({ id: 1, name: "update-name", image : "update-image"});
     const result = await updateBrand(_dependencies, { brandToUpdate });
 
     expect(result).toHaveProperty("name", brandToUpdate.name);
@@ -30,10 +30,9 @@ describe("Update Brand", () => {
   });
 
   test("should throw error when brand id does not exist", async () => {
-    const brandToUpdate = createBrandMock({ id: "non-exist-id", name: "update-name"});
-    const result = await updateBrand(_dependencies, {
-      brandToUpdate,
-    });
-    expect(result).toEqual(createNotFoundError("Brand not found"));
+    const brandToUpdate = createBrandMock({ id: 100, name: "update-name"});
+     await expect(
+      updateBrand(_dependencies,{brandToUpdate})
+    ).rejects.toThrow("Brand not found");
   });
 });

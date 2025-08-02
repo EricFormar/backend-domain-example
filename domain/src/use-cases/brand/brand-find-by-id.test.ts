@@ -6,8 +6,8 @@ import { BrandFindByIdDependencies, findBrandById } from "./brand-find-by-id";
 
 describe("Find Brand by ID", () => {
   const _mockedBrandRepository : MockedBrandRepository= createBrandRepositoryMock([
-    createBrandMock({id: "any-id"}),
-    createBrandMock({id: "other-id"}),
+    createBrandMock({id: 1}),
+    createBrandMock({id: 2}),
   ]);
 
   let _dependencies :BrandFindByIdDependencies;
@@ -19,14 +19,14 @@ describe("Find Brand by ID", () => {
   })
 
   it("should return a brand by id", async () => {
-    const brandId = "any-id";
+    const brandId = 1;
     const result = await findBrandById(_dependencies,{id : brandId});
 
     expect(result).toHaveProperty('id', brandId);
   });
 
   it("should return error if brand not found", async () => {
-    const brandId = "undefined-id";
+    const brandId = 1000;
     const result = await findBrandById(_dependencies, {
       id : brandId
     });

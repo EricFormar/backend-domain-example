@@ -6,8 +6,8 @@ import { createInvalidDataError } from "../../errors/error";
 
 describe("CreateBrand", () => {
   const _mockedBrandRepository : MockedBrandRepository= createBrandRepositoryMock([
-    createBrandMock({id: "any-id"}),
-    createBrandMock({id: "other-id"}),
+    createBrandMock({id: 1}),
+    createBrandMock({id: 2}),
   ]);
 
   let _dependencies : BrandCreateDependencies;
@@ -27,9 +27,9 @@ describe("CreateBrand", () => {
     const result = await brandCreate(_dependencies, payload)
 
     expect(result).toEqual({
-      id: "any-id",
-      name: "new-brand",
-      image: "any-image",
+      id: 1,
+      name: payload.name,
+      image: payload.image,
     });
   });
 
