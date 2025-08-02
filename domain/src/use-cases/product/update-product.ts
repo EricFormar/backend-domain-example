@@ -10,12 +10,12 @@ export interface ProductFindByIdRequestModel {
   productToUpdate: Product;
 }
 
-export async function productUpdate(
+export async function updateProduct(
   { productRepository }: ProductFindByIdDependencies,
   { productToUpdate }: ProductFindByIdRequestModel
 ): Promise<Product | NotFoundError> {
   const product = await productRepository.findById(productToUpdate.id);
-  if (!product) return createNotFoundError("Product not found");
+  if (!product) throw createNotFoundError("Product not found");
   const updatedProduct = await productRepository.update(productToUpdate);
 
   return updatedProduct;

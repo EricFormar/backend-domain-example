@@ -6,13 +6,15 @@ export interface DeleteProductDependencies {
 }
 
 export interface DeleteProductRequestModel {
-  id: number;
+  id: string;
 }
 
-export async function productDelete(
+export async function deleteProduct(
   { productRepository }: DeleteProductDependencies,
   { id }: DeleteProductRequestModel
 ): Promise<void > {
- await productRepository.delete(id);
+  const product = await productRepository.findById(id);
+  if (!product) throw createNotFoundError("Product not found");
+  await productRepository.delete(id);
   return;
 }
