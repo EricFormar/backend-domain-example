@@ -15,7 +15,7 @@ export async function brandCreate(
   if(hasErrors) throw hasErrors;
   
   const existingBrand = await brandRepository.findByName(name);
-  if (existingBrand) return createInvalidDataError("Name already in use");
+  if (existingBrand) throw createInvalidDataError("Name already exists");
 
   const brand = {
     name,

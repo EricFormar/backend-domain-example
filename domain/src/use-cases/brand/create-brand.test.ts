@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, test } from "vitest";
 import {
   createBrandRepositoryMock,
   MockedBrandRepository,
@@ -16,6 +16,7 @@ describe("CreateBrand", () => {
     createBrandRepositoryMock([
       createBrandMock({ id: "any-id" }),
       createBrandMock({ id: "other-id" }),
+      createBrandMock({ id: "exist-id", name :"exist-name" })
     ]);
 
   let _dependencies: BrandCreateDependencies;
@@ -24,6 +25,15 @@ describe("CreateBrand", () => {
     _dependencies = {
       brandRepository: _mockedBrandRepository,
     };
+  });
+
+  test("should throw error when name is exists", async () => {
+    const payload = {
+      name: "exist-name",
+    };
+    await expect(brandCreate(_dependencies, payload)).rejects.toThrow(
+      "Name already exists"
+    );
   });
 
   it("should create new brand successfully", async () => {
