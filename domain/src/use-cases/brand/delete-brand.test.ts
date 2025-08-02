@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, test } from "vitest";
 
-import { createNotFoundError } from "../../errors/error";
 import { createBrandMock } from "../../mocks/brand-mock";
 import { deleteBrand, DeleteBrandDependencies } from "./delete-brand";
 import {
@@ -11,8 +10,8 @@ import {
 describe("Delete brand", () => {
   const _mockedBrandRepository: MockedBrandRepository =
     createBrandRepositoryMock([
-      createBrandMock({ id: 1 }),
-      createBrandMock({ id: 2 }),
+      createBrandMock({ id: "any-id" }),
+      createBrandMock({ id: "other-id" }),
     ]);
 
   let _dependencies: DeleteBrandDependencies;
@@ -24,13 +23,13 @@ describe("Delete brand", () => {
   });
 
   test("should get brand by id", async () => {
-    const brandId = 1;
+    const brandId = "any-id";
     const result = await deleteBrand(_dependencies, { id: brandId });
     expect(result).toBeUndefined();
   });
 
   test("should throw error when brand id does not exist", async () => {
-    const brandId = 100;
+    const brandId = "unexistent-id";
     await expect(
       deleteBrand(_dependencies, {
         id: brandId,

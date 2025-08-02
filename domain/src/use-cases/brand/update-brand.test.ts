@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, test } from "vitest";
 
-import { createNotFoundError } from "../../errors/error";
 import { BrandUpdateDependencies, updateBrand } from "./update-brand";
 import { createBrandRepositoryMock, MockedBrandRepository } from "../../mocks/brand-respository-mock";
 import { createBrandMock } from "../../mocks/brand-mock";
@@ -9,8 +8,8 @@ import { createBrandMock } from "../../mocks/brand-mock";
 describe("Update Brand", () => {
   const _mockedBrandRepository: MockedBrandRepository =
     createBrandRepositoryMock([
-      createBrandMock({ id: 1, name: "any-name" }),
-      createBrandMock({ id: 2 }),
+      createBrandMock({ id: "any-id", name: "any-name" }),
+      createBrandMock({ id: "other-id" }),
     ]);
 
   let _dependencies: BrandUpdateDependencies;
@@ -22,7 +21,7 @@ describe("Update Brand", () => {
   });
 
   test("should update a brand", async () => {
-    const brandToUpdate = createBrandMock({ id: 1, name: "update-name", image : "update-image"});
+    const brandToUpdate = createBrandMock({ id: "any-id", name: "update-name", image : "update-image"});
     const result = await updateBrand(_dependencies, { brandToUpdate });
 
     expect(result).toHaveProperty("name", brandToUpdate.name);
@@ -30,7 +29,7 @@ describe("Update Brand", () => {
   });
 
   test("should throw error when brand id does not exist", async () => {
-    const brandToUpdate = createBrandMock({ id: 100, name: "update-name"});
+    const brandToUpdate = createBrandMock({ id: "non-existent-id", name: "update-name"});
      await expect(
       updateBrand(_dependencies,{brandToUpdate})
     ).rejects.toThrow("Brand not found");

@@ -1,33 +1,40 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { createBrandRepositoryMock, MockedBrandRepository } from "../../mocks/brand-respository-mock";
+import {
+  createBrandRepositoryMock,
+  MockedBrandRepository,
+} from "../../mocks/brand-respository-mock";
 import { createBrandMock } from "../../mocks/brand-mock";
-import { brandCreate, BrandCreateDependencies, BrandCreateRequestModel } from "./create-brand";
+import {
+  brandCreate,
+  BrandCreateDependencies,
+  BrandCreateRequestModel,
+} from "./create-brand";
 import { createInvalidDataError } from "../../errors/error";
 
 describe("CreateBrand", () => {
-  const _mockedBrandRepository : MockedBrandRepository= createBrandRepositoryMock([
-    createBrandMock({id: 1}),
-    createBrandMock({id: 2}),
-  ]);
+  const _mockedBrandRepository: MockedBrandRepository =
+    createBrandRepositoryMock([
+      createBrandMock({ id: "any-id" }),
+      createBrandMock({ id: "other-id" }),
+    ]);
 
-  let _dependencies : BrandCreateDependencies;
+  let _dependencies: BrandCreateDependencies;
 
   beforeEach(() => {
     _dependencies = {
-      brandRepository : _mockedBrandRepository
-    }
-  })
-
+      brandRepository: _mockedBrandRepository,
+    };
+  });
 
   it("should create new brand successfully", async () => {
-    const payload : BrandCreateRequestModel = {
+    const payload: BrandCreateRequestModel = {
       name: "new-brand",
       image: "any-image",
     };
-    const result = await brandCreate(_dependencies, payload)
+    const result = await brandCreate(_dependencies, payload);
 
     expect(result).toEqual({
-      id: 1,
+      id: "new-id",
       name: payload.name,
       image: payload.image,
     });
@@ -37,9 +44,9 @@ describe("CreateBrand", () => {
     const payload = {
       name: "",
     };
-    const result = await brandCreate(_dependencies, payload)
-    expect(result).toEqual(createInvalidDataError("Name must be not empty"));
-
+    await expect(brandCreate(_dependencies, payload)).rejects.toThrow(
+      "Name must be not empty"
+    );
   });
 
   it("should throw error when name is too long", async () => {
@@ -47,9 +54,8 @@ describe("CreateBrand", () => {
       name: "a".repeat(21),
     };
 
-    const result = await brandCreate(_dependencies, payload)    
-    expect(result).toEqual(createInvalidDataError(
-      "Name cannot be longer than 20 characters")
+    await expect(brandCreate(_dependencies, payload)).rejects.toThrow(
+      "Name cannot be longer than 20 characters"
     );
   });
 });
