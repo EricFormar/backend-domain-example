@@ -10,24 +10,27 @@ import {
   UserCreateDependencies,
   UserCreateRequestModel,
 } from "./create-user";
+import { createCryptoServiceMock } from "../../mocks/crypto-repository-mock";
 
 describe("Create new user", async () => {
-  const _mockedUserRepository: MockedUserRepository = createUserRepositoryMock([]);
-
   const existingUser: User = {
-    id: "existing user id",
+    id: "existing-id",
     password: "12345678",
     email: "existing@user.com",
     name: "Existing User",
     role: "user" as UserRole,
   };
+  const _mockedUserRepository: MockedUserRepository = createUserRepositoryMock([
+    existingUser,
+  ]);
+
   let _dependencies: UserCreateDependencies;
 
   beforeEach(() => {
     _dependencies = {
       userRepository: _mockedUserRepository,
+      cryptoRepository: createCryptoServiceMock(),
     };
-    _dependencies.userRepository.create(existingUser);
   });
 
   test("With an email already in use, fails with InvalidData", async () => {
@@ -35,9 +38,10 @@ describe("Create new user", async () => {
       email: "existing@user.com",
       password: "12345678",
       name: "Test User",
-    };    
-    const result = await userCreate(_dependencies, payload);
-    expect(result).toEqual(createInvalidDataError("Email already in use"));
+    };
+    await expect(userCreate(_dependencies, payload)).rejects.toThrow(
+      createInvalidDataError("Email already in use")
+    );
   });
 
   test("With an empty email, fails with InvalidData", async () => {
@@ -46,9 +50,9 @@ describe("Create new user", async () => {
       password: "12345678",
       name: "Test User",
     };
-    const result = await userCreate(_dependencies, payload);
-
-    expect(result).toEqual(createInvalidDataError("Email must be not empty"));
+    await expect(userCreate(_dependencies, payload)).rejects.toThrow(
+      createInvalidDataError("Email must be not empty")
+    );
   });
 
   test("With an empty password, fails with InvalidData", async () => {
@@ -57,9 +61,7 @@ describe("Create new user", async () => {
       password: "",
       name: "Test User",
     };
-    const result = await userCreate(_dependencies, payload);
-
-    expect(result).toEqual(
+    await expect(userCreate(_dependencies, payload)).rejects.toThrow(
       createInvalidDataError("Password must be not empty")
     );
   });
@@ -70,9 +72,10 @@ describe("Create new user", async () => {
       password: "12345678",
       name: "",
     };
-    const result = await userCreate(_dependencies, payload);
 
-    expect(result).toEqual(createInvalidDataError("Name must be not empty"));
+    await expect(userCreate(_dependencies, payload)).rejects.toThrow(
+      createInvalidDataError("Name must be not empty")
+    );
   });
 
   test("With valid data, registers the user successfully", async () => {
@@ -83,9 +86,17 @@ describe("Create new user", async () => {
     };
 
     const result = await userCreate(_dependencies, payload);
-
     const user = await _mockedUserRepository.findByEmail(payload.email);
+
     expect(user).not.toBeNull();
     expect(result).toEqual(user);
+    if (user?.password) {
+      expect(
+        await _dependencies.cryptoRepository.comparePassword(
+          payload.password,
+          user.password
+        )
+      ).toBe(true);
+    }
   });
 });
