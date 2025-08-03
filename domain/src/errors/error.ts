@@ -23,67 +23,88 @@ export class AppError extends Error {
 // --- Specific Error Interfaces ---
 
 /**
- * Interface for errors indicating that provided data is invalid. (HTTP 400)
+ * Class for errors indicating that provided data is invalid. (HTTP 400)
  */
 export class InvalidDataError extends AppError {
     public readonly name: 'InvalidDataError' = 'InvalidDataError';
     public readonly httpStatus: 400 = 400;
-    constructor(message?: string) {
-        super(message || 'Invalid data provided');
+    constructor(message: string = 'Invalid data provided') {
+        super(message);
+        Object.setPrototypeOf(this, InvalidDataError.prototype);
     }
 }
 
 /**
- * Interface for errors indicating that a resource was not found. (HTTP 404)
+ * Class for errors indicating that a resource was not found. (HTTP 404)
  */
 export class NotFoundError extends AppError {
     public readonly name: 'NotFoundError' = 'NotFoundError';
     public readonly httpStatus: 404 = 404;
 
-    constructor(message?: string) {
-        super(message || 'Recurso no encontrado');
+    constructor(message: string = 'Resource not found') {
+        super(message);
+        Object.setPrototypeOf(this, NotFoundError.prototype);
     }
 }
 
 /**
- * Interface for errors indicating a bad request from the client. (HTTP 400)
+ * Class for errors indicating a bad request from the client. (HTTP 400)
  */
-export interface BadRequestError extends AppError {
-    name: 'BadRequestError';
-    httpStatus: 400;
+export class BadRequestError extends AppError {
+    public readonly name: 'BadRequestError' = 'BadRequestError';
+    public readonly httpStatus: 400 = 400;
+    constructor(message: string = 'Bad request') {
+        super(message);
+        Object.setPrototypeOf(this, BadRequestError.prototype);
+    }
 }
 
 /**
- * Interface for errors indicating that the request requires user authentication. (HTTP 401)
+ * Class for errors indicating that the request requires user authentication. (HTTP 401)
  */
-export interface UnauthorizedError extends AppError {
-    name: 'UnauthorizedError';
-    httpStatus: 401;
+export class UnauthorizedError extends AppError {
+    public readonly name: 'UnauthorizedError' = 'UnauthorizedError';
+    public readonly httpStatus: 401 = 401;
+    constructor(message: string = 'Unauthorized access') {
+        super(message);
+        Object.setPrototypeOf(this, UnauthorizedError.prototype);
+    }
 }
 
 /**
- * Interface for errors indicating that the client does not have permission to access the resource. (HTTP 403)
+ * Class for errors indicating that the client does not have permission to access the resource. (HTTP 403)
  */
-export interface ForbiddenError extends AppError {
-    name: 'ForbiddenError';
-    httpStatus: 403;
+export class ForbiddenError extends AppError {
+    public readonly name: 'ForbiddenError' = 'ForbiddenError';
+    public readonly httpStatus: 403 = 403;
+    constructor(message: string = 'Access forbidden') {
+        super(message);
+        Object.setPrototypeOf(this, ForbiddenError.prototype);
+    }
 }
 
 /**
- * Interface for errors indicating that a resource already exists and conflicts with a new creation attempt. (HTTP 409)
+ * Class for errors indicating that a resource already exists and conflicts with a new creation attempt. (HTTP 409) 
  */
-export interface ConflictError extends AppError {
-    name: 'ConflictError';
-    httpStatus: 409;
+export class ConflictError extends AppError {
+    public readonly name: 'ConflictError' = 'ConflictError';
+    public readonly httpStatus: 409 = 409;
+    constructor(message: string = 'Resource already exists') {
+        super(message);
+        Object.setPrototypeOf(this, ConflictError.prototype);
+    }
 }
 
 /**
- * Interface for errors indicating an unexpected condition on the server. (HTTP 500)
- * Corrected from your original 403 to the standard 500 for Internal Server Error.
+ * Class for errors indicating an unexpected condition on the server. (HTTP 500)
  */
-export interface InternalServerError extends AppError {
-    name: 'InternalServerError';
-    httpStatus: 500;
+export class InternalServerError extends AppError {
+    public readonly name: 'InternalServerError' = 'InternalServerError';
+    public readonly httpStatus: 500 = 500;
+    constructor(message: string = 'An unexpected internal server error occurred') {
+        super(message);
+        Object.setPrototypeOf(this, InternalServerError.prototype)
+    }
 }
 
 // --- Error Creation Functions (Factory Functions) ---
@@ -108,64 +129,38 @@ export const createNotFoundError = (message: string = "Resource not found"): Not
  * Creates a BadRequestError.
  * @param message An optional custom message for the error. Defaults to 'Bad request.'
  */
-export const createBadRequestError = (message: string = 'Bad request.'): BadRequestError => ({
-    name: 'BadRequestError',
-    message,
-    httpStatus: 400,
-});
+export const createBadRequestError = (message: string = 'Bad request.'): BadRequestError => {
+    return new BadRequestError(message);
+};
 
 /**
  * Creates an UnauthorizedError.
  * @param message An optional custom message for the error. Defaults to 'Unauthorized access.'
  */
-export const createUnauthorizedError = (message: string = 'Unauthorized access.'): UnauthorizedError => ({
-    name: 'UnauthorizedError',
-    message,
-    httpStatus: 401,
-});
+export const createUnauthorizedError = (message: string = 'Unauthorized access.'): UnauthorizedError => {
+    return new UnauthorizedError(message);
+};
 
 /**
  * Creates a ForbiddenError.
  * @param message An optional custom message for the error. Defaults to 'Access forbidden.'
  */
-export const createForbiddenError = (message: string = 'Access forbidden.'): ForbiddenError => ({
-    name: 'ForbiddenError',
-    message,
-    httpStatus: 403,
-});
+export const createForbiddenError = (message: string = 'Access forbidden.'): ForbiddenError => {
+    return new ForbiddenError(message);
+};
 
 /**
- * Creates a ConflictError (e.g., resource already exists).
+ * Creates a ConflictError.
  * @param message An optional custom message for the error. Defaults to 'Resource already exists.'
  */
-export const createConflictError = (message: string = 'Resource already exists.'): ConflictError => ({
-    name: 'ConflictError',
-    message,
-    httpStatus: 409,
-});
+export const createConflictError = (message: string = 'Resource already exists.'): ConflictError => {
+    return new ConflictError(message);
+};
 
 /**
  * Creates an InternalServerError.
  * @param message An optional custom message for the error. Defaults to 'An unexpected internal server error occurred.'
  */
-export const createInternalServerError = (message: string = 'An unexpected internal server error occurred.'): InternalServerError => ({
-    name: 'InternalServerError',
-    message,
-    httpStatus: 500,
-});
-
-// --- Specific Use-Case Error (Using existing factory functions) ---
-
-/**
- * Creates an error for invalid credentials.
- * This is effectively a BadRequestError or UnauthorizedError depending on context.
- * We'll use BadRequestError here for its 400 status.
- */
-export const createCredentialsError = (message: string = 'Invalid credentials.'): AppError => {
-    // You can call createBadRequestError and then override the name if needed,
-    // or just construct the object directly.
-    return {
-        ...createBadRequestError(message), // Inherit properties from BadRequestError
-        name: 'CredentialsError', // Override the name to be more specific
-    };
+export const createInternalServerError = (message: string = 'An unexpected internal server error occurred.'): InternalServerError => {
+    return new InternalServerError(message);
 };
