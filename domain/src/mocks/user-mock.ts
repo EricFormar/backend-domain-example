@@ -6,7 +6,6 @@ export function createUserMock(opts: Partial<User>) : User {
         name: 'any name',
         email : 'any-email',
         password :'any-password',
-        role : 'user',
         ...opts
     }
 }
