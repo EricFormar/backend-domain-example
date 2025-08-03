@@ -9,7 +9,7 @@ import {
   BrandCreateDependencies,
   BrandCreateRequestModel,
 } from "./create-brand";
-import { createInvalidDataError } from "../../errors/error";
+import { createBadRequestError, createConflictError, createInvalidDataError } from "../../errors/error";
 
 describe("CreateBrand", () => {
   const _mockedBrandRepository: MockedBrandRepository =
@@ -32,7 +32,7 @@ describe("CreateBrand", () => {
       name: "exist-name",
     };
     await expect(brandCreate(_dependencies, payload)).rejects.toThrow(
-      "Name already exists"
+      createConflictError("Name already exists")
     );
   });
 
@@ -55,7 +55,7 @@ describe("CreateBrand", () => {
       name: "",
     };
     await expect(brandCreate(_dependencies, payload)).rejects.toThrow(
-      "Name must be not empty"
+      createBadRequestError("Name must be not empty")
     );
   });
 
@@ -65,7 +65,7 @@ describe("CreateBrand", () => {
     };
 
     await expect(brandCreate(_dependencies, payload)).rejects.toThrow(
-      "Name cannot be longer than 20 characters"
+      createBadRequestError("Name cannot be longer than 20 characters")
     );
   });
 });

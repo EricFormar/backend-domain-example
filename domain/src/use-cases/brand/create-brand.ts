@@ -1,5 +1,5 @@
 import { Brand } from "../../entities/Brand";
-import { createInvalidDataError, InvalidDataError } from "../../errors/error";
+import { BadRequestError, createBadRequestError, createConflictError, InvalidDataError } from "../../errors/error";
 import { BrandRepository } from "../../repositories/brand-repository";
 
 export type BrandCreateRequestModel = Omit<Brand, "id">;
@@ -15,7 +15,7 @@ export async function brandCreate(
   if(hasErrors) throw hasErrors;
   
   const existingBrand = await brandRepository.findByName(name);
-  if (existingBrand) throw createInvalidDataError("Name already exists");
+  if (existingBrand) throw createConflictError("Name already exists");
 
   const brand = {
     name,
@@ -27,11 +27,11 @@ export async function brandCreate(
 
 function validateData(
   name: string
-): InvalidDataError | void {
+): BadRequestError | void {
   if (name.trim() === "") {
-    return createInvalidDataError("Name must be not empty");
+    return createBadRequestError("Name must be not empty");
   }
   if (name.trim().length > 20) {
-    return createInvalidDataError("Name cannot be longer than 20 characters");
+    return createBadRequestError("Name cannot be longer than 20 characters");
   }
 }
