@@ -22,15 +22,21 @@ export function brandController() {
         });
         return res.status(200).json({
           ok: true,
+          meta: {
+            total: brands.length,
+            url: `${req.protocol}://${req.get('host')}/api/brand`
+          },
           data: brands,
+          message: "Todos las marcas",
+
         });
       } catch (e) {
         const error =
           e instanceof AppError
             ? e
             : createInternalServerError(
-                "Upss, hubo un error al obtener las marcas"
-              );
+              "Ups, hubo un error al obtener las marcas"
+            );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
@@ -40,27 +46,32 @@ export function brandController() {
     // Get brand by id
     getBrandById: async (req: Request, res: Response) => {
       try {
-        const { brandId } = req.params;
+        const { id } = req.params;
         const brand = await findBrandById(
           {
             brandRepository: brandService(),
           },
           {
-            id: brandId,
+            id: id,
           }
         );
 
         return res.status(200).json({
           ok: true,
+          meta: {
+            url: `${req.protocol}://${req.get('host')}/api/brand/${id}`
+          },
           data: brand,
+          message: "Marca encontrada con éxito",
+      
         });
       } catch (e) {
         const error =
           e instanceof AppError
             ? e
             : createInternalServerError(
-                "Upss, hubo un error al crear una nueva marca"
-              );
+              "Ups, hubo un error al crear una nueva marca"
+            );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
@@ -87,15 +98,19 @@ export function brandController() {
 
         return res.status(200).json({
           ok: true,
+          meta: {
+            url: `${req.protocol}://${req.get('host')}/api/brands/${('id' in newBrand) ? newBrand.id : ''}`
+          },
           data: newBrand,
+          message: "Marca creada con éxito",
         });
       } catch (e) {
         const error =
           e instanceof AppError
             ? e
             : createInternalServerError(
-                "Upss, hubo un error al crear una nueva marca"
-              );
+              "Ups, hubo un error al crear una nueva marca"
+            );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
@@ -105,7 +120,7 @@ export function brandController() {
     // Update brand
     updateBrand: async (req: Request, res: Response) => {
       try {
-        const brand: Brand = { ...req.body, id: req.params.brandId };
+        const brand: Brand = { ...req.body, id: req.params.id };
         const updatedBrand = await updateBrand(
           {
             brandRepository: brandService(),
@@ -116,15 +131,19 @@ export function brandController() {
         );
         return res.status(200).json({
           ok: true,
+          meta: {
+            url: `${req.protocol}://${req.get('host')}/api/brands/${brand.id}`
+          },
           data: updatedBrand,
+          message: "Marca actualizada con éxito",
         });
       } catch (e) {
         const error =
           e instanceof AppError
             ? e
             : createInternalServerError(
-                "Upss, hubo un error al actualizar una nueva marca"
-              );
+              "Ups, hubo un error al actualizar una nueva marca"
+            );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
@@ -134,25 +153,26 @@ export function brandController() {
     // Delete brand
     deleteBrand: async (req: Request, res: Response) => {
       try {
-        const { brandId } = req.params;
+        const { id } = req.params;
         await deleteBrand(
           {
             brandRepository: brandService(),
           },
           {
-            id: brandId,
+            id,
           }
         );
         return res.status(200).json({
           ok: true,
+          message : "Marca eliminada con éxito",
         });
       } catch (e) {
         const error =
           e instanceof AppError
             ? e
             : createInternalServerError(
-                "Upss, hubo un error al eliminar la marca"
-              );
+              "Ups, hubo un error al eliminar la marca"
+            );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
