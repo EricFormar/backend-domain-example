@@ -2,7 +2,7 @@ import {config} from 'dotenv';
 import path from 'path';
 
 type TypeMode = 'development' | 'production' | 'test';
-const mode : TypeMode = process.env.NODE_ENV as TypeMode || 'test';
+const mode : TypeMode = process.env.NODE_ENV as TypeMode || 'development';
 
 const envFile = `.env.${mode}`;
 config({ path: path.join(__dirname,'environments', envFile) });
