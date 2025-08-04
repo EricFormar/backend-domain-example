@@ -5,8 +5,8 @@ const router = Router();
 const {getAllBrands, getBrandById, createNewBrand, updateBrand, deleteBrand} = brandController();
 router
     .get('/', getAllBrands)
-    .get('/:brandId', getBrandById)
+    .get('/:id', getBrandById)
     .post('/', createNewBrand)
-    .put('/:brandId', updateBrand)
-    .delete('/:brandId', deleteBrand)
+    .put('/:id', updateBrand)
+    .delete('/:id', deleteBrand)
 export default router

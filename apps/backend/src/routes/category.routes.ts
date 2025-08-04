@@ -6,9 +6,9 @@ const router = Router();
 const {getAllCategories, getCategoryById, createNewCategory, updateCategory, deleteCategory} = categoryController();
 router
     .get('/', getAllCategories)
-    .get('/:categoryId', getCategoryById)
+    .get('/:id', getCategoryById)
     .post('', createNewCategory)
-    .put('/:categoryId', updateCategory)
-    .delete('/:categoryId', deleteCategory)
+    .put('/:id', updateCategory)
+    .delete('/:id', deleteCategory)
 export default router
 
