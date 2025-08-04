@@ -52,7 +52,7 @@ export function categoryService(): CategoryRepository {
     // Delete category
     delete: async function (id: string) {
       const categoryToDelete = await CategoryModel.findByPk(id);
-       if (!categoryToDelete)
+      if (!categoryToDelete)
         throw createNotFoundError(
           "No existe una categoría con el ID " + id
         );
@@ -64,11 +64,7 @@ export function categoryService(): CategoryRepository {
       const category = await CategoryModel.findOne({
         where: { name },
       });
-      if (!category)
-        throw createNotFoundError(
-          "No existe una categoría con el nombre " + name
-        );
-      return _mapToCategoryResponseDto(category);
+      return category ? _mapToCategoryResponseDto(category) : null;
     },
   };
 }
