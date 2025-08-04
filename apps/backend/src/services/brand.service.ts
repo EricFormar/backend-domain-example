@@ -62,9 +62,7 @@ export function brandService(): BrandRepository {
       const brand = await BrandModel.findOne({
         where: { name }
       });
-      if (!brand)
-        throw createNotFoundError("No existe una marca con el nombre " + name);
-      return _mapToBrandResponseDto(brand);
+      return brand ? _mapToBrandResponseDto(brand) : null;
     }
   };
 }
