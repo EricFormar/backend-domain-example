@@ -86,9 +86,7 @@ export function productController() {
           ok: true,
           data: newProduct,
         });
-      } catch (e) {
-        console.log(e);
-        
+      } catch (e) {        
         const error =
           e instanceof AppError
             ? e

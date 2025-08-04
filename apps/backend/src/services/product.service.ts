@@ -49,7 +49,6 @@ export function productService(): ProductRepository {
     },
     // Create product
     create: async function (product: Omit<Product, "id">) {
-      console.log(product);
       const newProduct = await ProductModel.create({
         ...product,
         brandId: product.brand?.id,
