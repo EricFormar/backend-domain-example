@@ -11,8 +11,8 @@ describe('List Brands', async () => {
             createBrandMock({ id: "other-id" })
         ]);
 
-        const result = await listBrands({ brandRepository });
-        expect(result.brands).toHaveLength(2);
+        const brands = await listBrands({ brandRepository });
+        expect(brands).toHaveLength(2);
 
     })
 });
