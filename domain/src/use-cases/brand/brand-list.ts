@@ -5,15 +5,8 @@ export interface ListBrandDependencies {
     brandRepository : BrandRepository
 };
 
-export interface ListBrandResponseModel {
-    brands : Brand[]
-}
-
-export async function listBrands({brandRepository} : ListBrandDependencies) : Promise<ListBrandResponseModel> {
+export async function listBrands({brandRepository} : ListBrandDependencies) : Promise<Brand[]> {
     
-    const brands = await brandRepository.findAll();
+    return await brandRepository.findAll();
 
-    return {
-        brands
-    }
 }
