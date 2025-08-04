@@ -1,10 +1,8 @@
 import { beforeEach, describe, expect, test } from "vitest";
 
-import { createNotFoundError } from "../../errors/error";
 import { createProductRepositoryMock, MockedProductRepository } from "../../mocks/product-repository-mock";
 import { createProductMock } from "../../mocks/product-mock";
-import { ProductFindByIdDependencies } from "./product-find-by-id";
-import { updateProduct } from "./update-product";
+import { ProductUpdateDependencies, updateProduct } from "./update-product";
 
 describe("Update Product", () => {
   const _mockedProductRepository: MockedProductRepository =
@@ -13,7 +11,7 @@ describe("Update Product", () => {
       createProductMock({ id: "other-id" }),
     ]);
 
-  let _dependencies: ProductFindByIdDependencies;
+  let _dependencies: ProductUpdateDependencies;
 
   beforeEach(() => {
     _dependencies = {

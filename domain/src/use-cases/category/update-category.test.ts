@@ -3,8 +3,7 @@ import { beforeEach, describe, expect, test } from "vitest";
 import { createNotFoundError } from "../../errors/error";
 import { createCategoryRepositoryMock, MockedCategoryRepository } from "../../mocks/category-repository-mock";
 import { createCategoryMock } from "../../mocks/category-mock";
-import { CategoryFindByIdDependencies } from "./category-find-by-id";
-import { updateCategory } from "./update-category";
+import { CategoryUpdateDependencies, updateCategory } from "./update-category";
 
 
 describe("Update Category", () => {
@@ -14,7 +13,7 @@ describe("Update Category", () => {
       createCategoryMock({ id: "other-id" }),
     ]);
 
-  let _dependencies: CategoryFindByIdDependencies;
+  let _dependencies: CategoryUpdateDependencies;
 
   beforeEach(() => {
     _dependencies = {

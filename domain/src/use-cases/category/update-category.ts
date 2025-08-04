@@ -2,17 +2,17 @@ import { Category } from "../../entities/Category";
 import { createNotFoundError, NotFoundError } from "../../errors/error";
 import { CategoryRepository } from "../../repositories/category-repository";
 
-export interface CategoryFindByIdDependencies {
+export interface CategoryUpdateDependencies {
   categoryRepository: CategoryRepository;
 }
 
-export interface CategoryFindByIdRequestModel {
+export interface CategoryUpdateRequestModel {
   categoryToUpdate: Category;
 }
 
 export async function updateCategory(
-  { categoryRepository }: CategoryFindByIdDependencies,
-  { categoryToUpdate }: CategoryFindByIdRequestModel
+  { categoryRepository }: CategoryUpdateDependencies,
+  { categoryToUpdate }: CategoryUpdateRequestModel
 ): Promise<Category | NotFoundError> {
   const category = await categoryRepository.findById(categoryToUpdate.id);
   if (!category) return createNotFoundError("Category not found");
