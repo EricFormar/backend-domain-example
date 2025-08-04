@@ -16,14 +16,14 @@ export function productService(): ProductRepository {
       price: product.price,
       discount: product.discount,
       description: product.description,
-      brand: {
+      brand: product.brand ? {
         id: product.brand.id.toString(),
         name: product.brand.name,
-      },
-      category: {
+      } : undefined,
+      category: product.category ? {
         id: product.category.id.toString(),
         name: product.category.name,
-      },
+      } : undefined,
     };
   };
   return {
@@ -40,15 +40,23 @@ export function productService(): ProductRepository {
     },
     // Get product by id
     findById: async function (productId: string) {
-      const product = await ProductModel.findByPk(productId);
+      const product = await ProductModel.findByPk(productId,{
+        include : ["category", "brand"]
+      });
       if (!product)
         throw createNotFoundError("No existe una marca con el ID " + productId);
       return _mapToProductResponseDto(product);
     },
     // Create product
     create: async function (product: Omit<Product, "id">) {
-      const newProduct = await ProductModel.create(product);
-      return _mapToProductResponseDto(newProduct);
+      console.log(product);
+      const newProduct = await ProductModel.create({
+        ...product,
+        brandId: product.brand?.id,
+        categoryId: product.category?.id,
+      });
+      const productCreated = await this.findById(newProduct.id.toString());
+      return _mapToProductResponseDto(productCreated as unknown as ProductModel);
     },
     // Update product
     update: async function (product: Product) {
