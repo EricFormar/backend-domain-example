@@ -58,13 +58,21 @@ export function productService(): ProductRepository {
       return _mapToProductResponseDto(productCreated as unknown as ProductModel);
     },
     // Update product
-    update: async function (product: Product) {
-      const productToUpdate = await ProductModel.findByPk(product.id);
+    update: async function (product: Product) {      
+      const productToUpdate = await ProductModel.findByPk(product.id);     
       if (!productToUpdate)
         throw createNotFoundError(
           "No existe una marca con el ID " + product.id
         );
-      productToUpdate.update(product);
+      productToUpdate.update({
+        name: product.name,
+        image: product.image,
+        price: product.price,
+        discount: product.discount,
+        description: product.description,
+        brandId: product.brand?.id,
+        categoryId: product.category?.id,
+      });
       const productUpdated = await productToUpdate.save();
       return _mapToProductResponseDto(productUpdated);
     },
