@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
 import { productService } from "../services/product.service";
-import { createInternalServerError } from "@project-example/domain/errors/error";
+import {
+  AppError,
+  createInternalServerError,
+} from "@project-example/domain/errors/error";
 import { Product } from "@project-example/domain/entities/Product";
 import { listProducts } from "@project-example/domain/use-cases/product/product-list";
 import { findProductById } from "@project-example/domain/use-cases/product/product-find-by-id";
-import { productCreate } from "@project-example/domain/use-cases/product/create-product";
+import { productCreate, ProductCreateRequestModel } from "@project-example/domain/use-cases/product/create-product";
 import { updateProduct } from "@project-example/domain/use-cases/product/update-product";
 import { deleteProduct } from "@project-example/domain/use-cases/product/delete-product";
 
@@ -15,7 +18,7 @@ export function productController() {
       try {
         const products = await listProducts({
           productRepository: productService(),
-        })
+        });
         return res.status(200).json({
           ok: true,
           data: products,
@@ -35,20 +38,25 @@ export function productController() {
     getProductById: async (req: Request, res: Response) => {
       try {
         const { id } = req.params;
-        const product = await findProductById({
-          productRepository: productService()
-        }, {
-          id,
-        })
+        const product = await findProductById(
+          {
+            productRepository: productService(),
+          },
+          {
+            id,
+          }
+        );
         return res.status(200).json({
           ok: true,
           data: product,
         });
-      } catch (e) {
+      } catch (e) {        
         const error =
-          createInternalServerError(
-            "Upss, hubo un error al obtener la producto"
-          ) || e;
+          e instanceof AppError
+            ? e
+            : createInternalServerError(
+                "Upss, hubo un error al obtener la producto"
+              );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
@@ -59,25 +67,34 @@ export function productController() {
     createNewProduct: async (req: Request, res: Response) => {
       try {
         //TODO VALIDAR!!
-        const { name, description, price, discount, image } = req.body;
-        const newProduct = await productCreate({
-          productRepository: productService(),
-        }, {
-          name,
-          description,
-          price,
-          discount,
-          image
-        })
+        const { name, description, price, discount, image, brand, category } : ProductCreateRequestModel = req.body;
+        const newProduct = await productCreate(
+          {
+            productRepository: productService(),
+          },
+          {
+            name,
+            description,
+            price,
+            discount,
+            image,
+            brand,
+            category,
+          }
+        );
         return res.status(200).json({
           ok: true,
           data: newProduct,
         });
       } catch (e) {
+        console.log(e);
+        
         const error =
-          createInternalServerError(
-            "Upss, hubo un error al crear una nueva producto"
-          ) || e;
+          e instanceof AppError
+            ? e
+            : createInternalServerError(
+                "Upss, hubo un error al crear una nueva producto"
+              );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
@@ -87,12 +104,15 @@ export function productController() {
     // Update product
     updateProduct: async (req: Request, res: Response) => {
       try {
-        const product: Product = { ...req.body, id: req.params.productId }
-        const updatedProduct = await updateProduct({
-          productRepository: productService(),
-        }, {
-          productToUpdate: product
-        })
+        const product: Product = { ...req.body, id: req.params.productId };
+        const updatedProduct = await updateProduct(
+          {
+            productRepository: productService(),
+          },
+          {
+            productToUpdate: product,
+          }
+        );
         return res.status(200).json({
           ok: true,
           data: updatedProduct,
@@ -112,11 +132,14 @@ export function productController() {
     deleteProduct: async (req: Request, res: Response) => {
       try {
         const { id } = req.params;
-        await deleteProduct({
-          productRepository: productService(),
-        }, {
-          id,
-        })
+        await deleteProduct(
+          {
+            productRepository: productService(),
+          },
+          {
+            id,
+          }
+        );
         return res.status(200).json({
           ok: true,
         });
