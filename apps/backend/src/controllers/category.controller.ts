@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { categoryService } from "../services/category.service";
-import { createBadRequestError, createInternalServerError } from "@project-example/domain/errors/error";
+import { AppError, createBadRequestError, createInternalServerError } from "@project-example/domain/errors/error";
 import { Category } from "@project-example/domain/entities/Category";
 import { listCategory } from "@project-example/domain/use-cases/category/category-list";
 import { findCategoryById } from "@project-example/domain/use-cases/category/category-find-by-id";
@@ -18,12 +18,16 @@ export function categoryController() {
         })
         return res.status(200).json({
           ok: true,
+          meta: {
+            total: categories.length,
+            url: `${req.protocol}://${req.get('host')}/api/categories`
+          },
           data: categories,
         });
       } catch (e) {
         const error =
           createInternalServerError(
-            "Upss, hubo un error al obtener las categorías"
+            "Ups, hubo un error al obtener las categorías"
           ) || e;
         return res.status(error.httpStatus).json({
           ok: false,
@@ -42,13 +46,19 @@ export function categoryController() {
         })
         return res.status(200).json({
           ok: true,
+          meta: {
+            url: `${req.protocol}://${req.get('host')}/api/categories/${id}`
+          },
           data: category,
+          message: "Categoría encontrada"
         });
       } catch (e) {
         const error =
-          createInternalServerError(
-            "Upss, hubo un error al obtener la categoría"
-          ) || e;
+          e instanceof AppError
+            ? e
+            : createInternalServerError(
+            "Ups, hubo un error al obtener la categoría"
+          );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
@@ -70,13 +80,19 @@ export function categoryController() {
         })
         return res.status(200).json({
           ok: true,
+          meta: {
+            url: `${req.protocol}://${req.get('host')}/api/categories/${('id' in newCategory) ? newCategory.id : ''}`
+          },
           data: newCategory,
+          message: "Categoría creada con éxito"
         });
       } catch (e) {
         const error =
-          createInternalServerError(
-            "Upss, hubo un error al crear una nueva categoría"
-          ) || e;
+          e instanceof AppError
+            ? e
+            : createInternalServerError(
+            "Ups, hubo un error al crear una nueva categoría"
+          );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
@@ -86,7 +102,7 @@ export function categoryController() {
     // Update category
     updateCategory: async (req: Request, res: Response) => {
       try {
-        const categoryToUpdate: Category = { ...req.body, id: req.params.categoryId };
+        const categoryToUpdate: Category = { ...req.body, id: req.params.id };
         const updatedCategory = await updateCategory({
           categoryRepository: categoryService()
         },
@@ -96,13 +112,19 @@ export function categoryController() {
         )
         return res.status(200).json({
           ok: true,
+          meta: {
+            url: `${req.protocol}://${req.get('host')}/api/categories/${categoryToUpdate.id}`
+          },
           data: updatedCategory,
+          message: "Categoría actualizada con éxito"
         });
       } catch (e) {
         const error =
-          createInternalServerError(
-            "Upss, hubo un error al actualizar una nueva categoría"
-          ) || e;
+          e instanceof AppError
+            ? e
+            : createInternalServerError(
+            "Ups, hubo un error al actualizar una nueva categoría"
+          );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
@@ -115,17 +137,20 @@ export function categoryController() {
         const { id } = req.params;
         await deleteCategory({
           categoryRepository: categoryService()
-        },{
+        }, {
           id
         })
         return res.status(200).json({
           ok: true,
+          message : "Categoría eliminada con éxito"
         });
       } catch (e) {
-        const error =
-          createInternalServerError(
-            "Upss, hubo un error al eliminar la categoría"
-          ) || e;
+         const error =
+          e instanceof AppError
+            ? e
+            : createInternalServerError(
+            "Ups, hubo un error al eliminar la categoría"
+          );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
