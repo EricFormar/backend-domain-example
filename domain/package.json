@@ -1,5 +1,5 @@
 {
-  "name": "@backend-example/domain",
+  "name": "@project-example/domain",
   "description": "Lógica de negocio compartida",
   "version": "1.0.0",
   "private": true,
