@@ -24,7 +24,7 @@ export function brandController() {
           ok: true,
           meta: {
             total: brands.length,
-            url: `${req.protocol}://${req.get('host')}/api/brand`
+            url: `${req.protocol}://${req.get('host')}/api/brands`
           },
           data: brands,
           message: "Todos las marcas",
@@ -120,19 +120,19 @@ export function brandController() {
     // Update brand
     updateBrand: async (req: Request, res: Response) => {
       try {
-        const brand: Brand = { ...req.body, id: req.params.id };
+        const brandToUpdate: Brand = { ...req.body, id: req.params.id };
         const updatedBrand = await updateBrand(
           {
             brandRepository: brandService(),
           },
           {
-            brandToUpdate: brand,
+            brandToUpdate: brandToUpdate,
           }
         );
         return res.status(200).json({
           ok: true,
           meta: {
-            url: `${req.protocol}://${req.get('host')}/api/brands/${brand.id}`
+            url: `${req.protocol}://${req.get('host')}/api/brands/${brandToUpdate.id}`
           },
           data: updatedBrand,
           message: "Marca actualizada con éxito",
