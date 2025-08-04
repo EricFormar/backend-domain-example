@@ -87,14 +87,14 @@ export function productController() {
         return res.status(200).json({
           ok: true,
           data: newProduct,
-          message : "Producto creado con éxito"
+          message: "Producto creado con éxito"
         });
       } catch (e) {
         const error =
           e instanceof AppError
             ? e
             : createInternalServerError(
-              "Upss, hubo un error al crear una nueva producto"
+              "Ups, hubo un error al crear una nueva producto"
             );
         return res.status(error.httpStatus).json({
           ok: false,
@@ -105,7 +105,7 @@ export function productController() {
     // Update product
     updateProduct: async (req: Request, res: Response) => {
       try {
-        const product: Product = { ...req.body, id: req.params.id };        
+        const product: Product = { ...req.body, id: req.params.id };
         const updatedProduct = await updateProduct(
           {
             productRepository: productService(),
@@ -121,12 +121,12 @@ export function productController() {
         });
       } catch (e) {
         console.log(e);
-        
+
         const error =
           e instanceof AppError
             ? e
             : createInternalServerError(
-              "Upss, hubo un error al actualizar una nueva producto"
+              "Ups, hubo un error al actualizar una nueva producto"
             );
         return res.status(error.httpStatus).json({
           ok: false,
@@ -153,7 +153,7 @@ export function productController() {
       } catch (e) {
         const error =
           createInternalServerError(
-            "Upss, hubo un error al eliminar la producto"
+            "Ups, hubo un error al eliminar la producto"
           ) || e;
         return res.status(error.httpStatus).json({
           ok: false,
