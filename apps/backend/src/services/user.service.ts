@@ -7,12 +7,13 @@ import { createNotFoundError } from "@project-example/domain/errors/error";
 
 export function userService(): UserRepository {
     const _mapToUserResponseDto = (user: UserModel): Partial<User> => {
+        
         return {
             id: user.id.toString(),
             name: user.name,
             surname : user.surname,
             email: user.email,
-            role : user.role.name as UserRole
+            role : user.role?.name as UserRole
         };
     };
     return {
@@ -27,11 +28,8 @@ export function userService(): UserRepository {
                 where: { email },
                 include : ['role']
             });
-            if (!user)
-                throw createNotFoundError(
-                    "No existe un usuario con el email " + email
-                );
-            return {
+
+            return user ? {
                 id : user.id.toString(),
                 name : user.name,
                 surname : user.surname,
@@ -40,7 +38,7 @@ export function userService(): UserRepository {
                 password : user.password,
                 validated : user.validated,
                 locked : user.locked,
-            };
+            } : null ;
         },
         findById: async function (id: string) {
             const user = await UserModel.findByPk(id,{
@@ -59,15 +57,15 @@ export function userService(): UserRepository {
                     name : user.role
                 }
             });
-
-            const newUser = await UserModel.create({
-                 ...user,
-                rolId : role?.id,
-                validated : false,
-                locked : false,
-                image : ""
-            });
-            return _mapToUserResponseDto(newUser);
+            const dataUser = {
+                ...user,
+                rolId : role?.id as number,
+            }            
+            const newUser = await UserModel.create(dataUser);
+            
+            return _mapToUserResponseDto(await newUser.reload({
+                include : ['role']
+            }));
         },
         update: async function (user: User) {
             const userToUpdate = await UserModel.findByPk(user.id);
