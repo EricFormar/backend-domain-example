@@ -25,10 +25,12 @@ export function categoryController() {
           data: categories,
         });
       } catch (e) {
-        const error =
-          createInternalServerError(
+      const error =
+          e instanceof AppError
+            ? e
+            : createInternalServerError(
             "Ups, hubo un error al obtener las categorías"
-          ) || e;
+          );
         return res.status(error.httpStatus).json({
           ok: false,
           message: error.message,
