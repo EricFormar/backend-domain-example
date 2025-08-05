@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import connection from '../connection';
+import Rol from './rol';
 
 class User extends Model {
   public id!: number;
@@ -11,7 +12,7 @@ class User extends Model {
   public token?: string;
   public locked!: boolean;
   public validated!: boolean;
-  public rolId!: number;
+  public role!: Rol;
   
   public readonly updatedAt!: Date;
   public readonly createdAt!: Date;
@@ -79,8 +80,13 @@ User.init(
   {
     sequelize: connection,
     modelName: 'User',
-    
   }
 );
+
+User.belongsTo(Rol, {
+  foreignKey: 'rolId',
+  targetKey: 'id',
+  as: 'role',
+});
 
 export default User;
