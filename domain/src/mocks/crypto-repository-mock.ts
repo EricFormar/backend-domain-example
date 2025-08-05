@@ -2,7 +2,7 @@ import { CryptoRepository } from "../repositories/crypto-repository";
 import {User} from '../entities/User';
 import { ms } from "../utils/ms";
 
-export function createCryptoServiceMock() : CryptoRepository {
+export function createCryptoRepositoryMock() : CryptoRepository {
     return {
         async hashPassword(password: string) : Promise<string>{
             await ms(100)
@@ -22,6 +22,9 @@ export function createCryptoServiceMock() : CryptoRepository {
         },
         async validateToken(token: string) : Promise<User> {
             return JSON.parse(token.slice(3))
-        }
+        },
+        async generateRandomToken(): Promise<string> {
+            return Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+        },
     }
 }
