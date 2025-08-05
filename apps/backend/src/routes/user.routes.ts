@@ -3,11 +3,12 @@ import {Router} from 'express';
 import { userController } from 'src/controllers/user.controller';
 
 const router = Router();
-const {registerNewUser, getUserProfile, updateUser, deleteUser} = userController();
+const {registerNewUser,getAllUsers, getUserById, updateUser, deleteUser} = userController();
 router
-    .post('/register', registerNewUser)
-    .get('/profile', getUserProfile)
-    .put('/update', updateUser)
-    .delete('/delete', deleteUser);
+    .get('/', getAllUsers)
+    .post('/', registerNewUser)
+    .get('/:id', getUserById)
+    .put('/', updateUser)
+    .delete('/', deleteUser);
 export default router
 
