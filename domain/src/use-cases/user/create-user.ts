@@ -19,7 +19,7 @@ export async function userCreate(
   const hasErrors = validateData(email, password, name);
   if (hasErrors) throw hasErrors;
   const existingUser = await userRepository.findByEmail(email); 
-   
+
   if (existingUser) throw createInvalidDataError("Email already in use");
 
   const user: Omit<User, "id" | "validated" | "locked"> = {

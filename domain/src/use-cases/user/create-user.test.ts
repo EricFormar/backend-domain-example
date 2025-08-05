@@ -10,7 +10,7 @@ import {
   UserCreateDependencies,
   UserCreateRequestModel,
 } from "./create-user";
-import { createCryptoServiceMock } from "../../mocks/crypto-repository-mock";
+import { createCryptoRepositoryMock } from "../../mocks/crypto-repository-mock";
 
 describe("Create new user", async () => {
   const existingUser: User = {
@@ -33,7 +33,7 @@ describe("Create new user", async () => {
   beforeEach(() => {
     _dependencies = {
       userRepository: _mockedUserRepository,
-      cryptoRepository: createCryptoServiceMock(),
+      cryptoRepository: createCryptoRepositoryMock(),
     };
   });
 
@@ -44,8 +44,6 @@ describe("Create new user", async () => {
       name: "Test User",
       surname : "test-surname",
       image : "test-image",
-      validated : true,
-      locked : false,
       role: "user" as UserRole,
     };
     await expect(userCreate(_dependencies, payload)).rejects.toThrow(
@@ -60,8 +58,6 @@ describe("Create new user", async () => {
       name: "test-name",
       surname : "test-surname",
       image : "test-image",
-      validated : true,
-      locked : false,
       role: "user" as UserRole,
     };
     await expect(userCreate(_dependencies, payload)).rejects.toThrow(
@@ -76,8 +72,6 @@ describe("Create new user", async () => {
       name: "test-name",
       surname : "test-surname",
       image : "test-image",
-      validated : true,
-      locked : false,
       role: "user" as UserRole,
     };
     await expect(userCreate(_dependencies, payload)).rejects.toThrow(
@@ -92,8 +86,6 @@ describe("Create new user", async () => {
       name: "",
       surname : "test-surname",
       image : "test-image",
-      validated : true,
-      locked : false,
       role: "user" as UserRole,
     };
 
@@ -109,8 +101,6 @@ describe("Create new user", async () => {
       name: "test-name",
       surname : "test-surname",
       image : "test-image",
-      validated : true,
-      locked : false,
       role: "user" as UserRole,
     };
 
