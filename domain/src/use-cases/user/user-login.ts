@@ -1,7 +1,6 @@
-import { CryptoRepository } from "src/repositories/crypto-repository";
-import { createForbiddenError, createUnauthorizedError, UnauthorizedError } from "../../errors/error";
+import { CryptoRepository } from "../../repositories/crypto-repository";
+import { createUnauthorizedError, UnauthorizedError } from "../../errors/error";
 import { UserRepository } from "../../repositories/user-repository";
-import { UserRole } from "src/entities/User";
 
 export interface UserLoginDependencies {
   userRepository: UserRepository;
@@ -22,10 +21,11 @@ export async function login(
   { email, password }: UserLoginRequestModel
 ): Promise<UserLoginResponseModel | UnauthorizedError > {  
   const user = await userRepository.findByEmail(email);
+  
   if(user){
-    const isPasswordValid = await cryptoRepository.comparePassword(password, user.password);    
-    if (!isPasswordValid) throw createUnauthorizedError("Invalid credentials");
-    if(!user.role) throw createForbiddenError("Access forbidden");
+    const isPasswordValid = await cryptoRepository.comparePassword(password, user.password);
+    
+    if(!isPasswordValid) throw createUnauthorizedError("Invalid credentials");
     return {
       token : await cryptoRepository.generateJWT(user)
     }

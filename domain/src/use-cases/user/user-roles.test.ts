@@ -4,8 +4,7 @@ import {
   MockedUserRepository,
 } from "../../mocks/user-repository-mock";
 import { createUserMock } from "../../mocks/user-mock";
-import { createForbiddenError, createInvalidDataError } from "../../errors/error";
-import { createCryptoServiceMock } from "../../mocks/crypto-repository-mock";
+import { createCryptoRepositoryMock } from "../../mocks/crypto-repository-mock";
 import {
   login,
   UserLoginDependencies,
@@ -42,7 +41,7 @@ describe("User Role Verification", () => {
   beforeAll(async () => {
     _dependencies = {
       userRepository: _mockedUserRepository,
-      cryptoRepository: createCryptoServiceMock(),
+      cryptoRepository: createCryptoRepositoryMock(),
     };
   });
 

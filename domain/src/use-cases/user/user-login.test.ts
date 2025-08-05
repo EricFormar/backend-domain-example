@@ -2,27 +2,27 @@ import { beforeAll, describe, expect, test } from "vitest";
 import { createUserRepositoryMock, MockedUserRepository } from "../../mocks/user-repository-mock";
 import { createUserMock } from "../../mocks/user-mock";
 import { createUnauthorizedError } from "../../errors/error";
-import { createCryptoServiceMock } from "../../mocks/crypto-repository-mock";
+import { createCryptoRepositoryMock } from "../../mocks/crypto-repository-mock";
 import { login, UserLoginDependencies, UserLoginResponseModel } from "./user-login";
 
 describe("Login & auth user", () => {
-     const _mockedUserRepository: MockedUserRepository = createUserRepositoryMock([
+    const _mockedUserRepository: MockedUserRepository = createUserRepositoryMock([
         createUserMock({
             id: "stored-id",
-            name : "stored-name",
+            name: "stored-name",
             email: "stored@email.com",
             password: "[HASHED]stored-password",
-            role : "user"
+            role: "user"
         })
-     ]);
+    ]);
 
-    let _dependencies : UserLoginDependencies;
+    let _dependencies: UserLoginDependencies;
 
     beforeAll(async () => {
-       _dependencies = {
-        userRepository: _mockedUserRepository,
-        cryptoRepository : createCryptoServiceMock()
-       }
+        _dependencies = {
+            userRepository: _mockedUserRepository,
+            cryptoRepository: createCryptoRepositoryMock(),
+        }
     });
 
     test("With a valid email not stored, fails with error 'INVALID_CREDENTIALS'", async () => {
@@ -37,7 +37,7 @@ describe("Login & auth user", () => {
 
     test("With an existent email and an invalid password, fails with error 'INVALID_CREDENTIALS'", async () => {
         await expect(login(
-           _dependencies,
+            _dependencies,
             {
                 email: "stored@email.com",
                 password: "invalid password",
@@ -47,7 +47,7 @@ describe("Login & auth user", () => {
 
     test("With valid data, returns a valid token", async () => {
         const result = await login(
-           _dependencies,
+            _dependencies,
             {
                 email: "stored@email.com",
                 password: "stored-password",
