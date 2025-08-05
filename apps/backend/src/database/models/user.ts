@@ -12,6 +12,7 @@ class User extends Model {
   public token?: string;
   public locked!: boolean;
   public validated!: boolean;
+  public rolId! : number;
   public role!: Rol;
   
   public readonly updatedAt!: Date;
