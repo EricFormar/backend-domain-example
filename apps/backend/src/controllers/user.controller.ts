@@ -2,6 +2,7 @@ import { userCreate, UserCreateRequestModel } from "@project-example/domain";
 import { AppError, createInternalServerError } from "@project-example/domain/errors/error";
 import { findUserById } from "@project-example/domain/use-cases/user/user-find-by-id";
 import { Request, Response } from "express";
+import { cryptoService } from "src/services/crypto.service";
 import { userService } from "src/services/user.service";
 
 export function userController() {
@@ -22,9 +23,7 @@ export function userController() {
                     data: user,
                     message: "Usuario registrado con éxito"
                 });
-            } catch (e) {
-                console.log(e);
-                
+            } catch (e) {                
                 const error =
                     e instanceof AppError
                         ? e
