@@ -18,6 +18,10 @@ describe("Create new user", async () => {
     password: "12345678",
     email: "existing@user.com",
     name: "Existing User",
+    surname : "existing-surname",
+    image : "existing-image",
+    validated : true,
+    locked : false,
     role: "user" as UserRole,
   };
   const _mockedUserRepository: MockedUserRepository = createUserRepositoryMock([
@@ -38,6 +42,11 @@ describe("Create new user", async () => {
       email: "existing@user.com",
       password: "12345678",
       name: "Test User",
+      surname : "test-surname",
+      image : "test-image",
+      validated : true,
+      locked : false,
+      role: "user" as UserRole,
     };
     await expect(userCreate(_dependencies, payload)).rejects.toThrow(
       createInvalidDataError("Email already in use")
@@ -48,7 +57,12 @@ describe("Create new user", async () => {
     const payload: UserCreateRequestModel = {
       email: "",
       password: "12345678",
-      name: "Test User",
+      name: "test-name",
+      surname : "test-surname",
+      image : "test-image",
+      validated : true,
+      locked : false,
+      role: "user" as UserRole,
     };
     await expect(userCreate(_dependencies, payload)).rejects.toThrow(
       createInvalidDataError("Email must be not empty")
@@ -59,7 +73,12 @@ describe("Create new user", async () => {
     const payload: UserCreateRequestModel = {
       email: "valid@email.com",
       password: "",
-      name: "Test User",
+      name: "test-name",
+      surname : "test-surname",
+      image : "test-image",
+      validated : true,
+      locked : false,
+      role: "user" as UserRole,
     };
     await expect(userCreate(_dependencies, payload)).rejects.toThrow(
       createInvalidDataError("Password must be not empty")
@@ -71,6 +90,11 @@ describe("Create new user", async () => {
       email: "valid@email.com",
       password: "12345678",
       name: "",
+      surname : "test-surname",
+      image : "test-image",
+      validated : true,
+      locked : false,
+      role: "user" as UserRole,
     };
 
     await expect(userCreate(_dependencies, payload)).rejects.toThrow(
@@ -82,7 +106,12 @@ describe("Create new user", async () => {
     const payload: UserCreateRequestModel = {
       email: "valid@email.com",
       password: "12345678",
-      name: "User Test",
+      name: "test-name",
+      surname : "test-surname",
+      image : "test-image",
+      validated : true,
+      locked : false,
+      role: "user" as UserRole,
     };
 
     const result = await userCreate(_dependencies, payload);

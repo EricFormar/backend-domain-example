@@ -5,7 +5,7 @@ import { UserRepository } from "../../repositories/user-repository";
 
 export type UserCreateRequestModel = Omit<
   User,
-  "id"
+  "id" | "locked" | "validated"
 >;
 export interface UserCreateDependencies {
   userRepository: UserRepository;
@@ -14,18 +14,23 @@ export interface UserCreateDependencies {
 
 export async function userCreate(
   { userRepository, cryptoRepository }: UserCreateDependencies,
-  { email, password, name }: UserCreateRequestModel
-): Promise<User | InvalidDataError> {
+  { email, password, name, surname, role }: UserCreateRequestModel
+): Promise<Partial<User>| InvalidDataError> {
   const hasErrors = validateData(email, password, name);
   if (hasErrors) throw hasErrors;
-  const existingUser = await userRepository.findByEmail(email);  
+  const existingUser = await userRepository.findByEmail(email); 
+  console.log({existingUser});
+   
   if (existingUser) throw createInvalidDataError("Email already in use");
 
-  const user: User = {
-    id: "new-id",
+  const user: Omit<User, "id"> = {
     email,
     password : await cryptoRepository.hashPassword(password),
     name,
+    surname : "new-surname",
+    image : "new-image",
+    validated : true,
+    locked : false,
     role: "user",
   };
 
