@@ -13,7 +13,7 @@ export interface UserUpdateRequestModel {
 export async function updateUser(
   { userRepository }: UserUpdateDependencies,
   { userToUpdate }: UserUpdateRequestModel
-): Promise<User | NotFoundError> {
+): Promise<Partial<User> | NotFoundError> {
   const user = await userRepository.findById(userToUpdate.id);
   if (!user) return createNotFoundError("User not found");
   const updatedBrand = await userRepository.update(userToUpdate);
