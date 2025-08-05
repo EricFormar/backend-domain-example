@@ -14,24 +14,21 @@ export interface UserCreateDependencies {
 
 export async function userCreate(
   { userRepository, cryptoRepository }: UserCreateDependencies,
-  { email, password, name, surname, role }: UserCreateRequestModel
+  { email, password, name, surname, role, image }: UserCreateRequestModel
 ): Promise<Partial<User>| InvalidDataError> {
   const hasErrors = validateData(email, password, name);
   if (hasErrors) throw hasErrors;
   const existingUser = await userRepository.findByEmail(email); 
-  console.log({existingUser});
    
   if (existingUser) throw createInvalidDataError("Email already in use");
 
-  const user: Omit<User, "id"> = {
+  const user: Omit<User, "id" | "validated" | "locked"> = {
     email,
     password : await cryptoRepository.hashPassword(password),
     name,
-    surname : "new-surname",
-    image : "new-image",
-    validated : true,
-    locked : false,
-    role: "user",
+    surname,
+    image,
+    role,
   };
 
   return await userRepository.create(user);
