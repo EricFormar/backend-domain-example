@@ -1,4 +1,5 @@
-import { CryptoRepository, User } from "@project-example/domain";
+import { User } from "@project-example/domain/entities/User";
+import { CryptoRepository } from "@project-example/domain/repositories/crypto-repository";
 import bcrypt from "bcrypt";
 import crypto from 'crypto';
 import jwt from "jsonwebtoken";

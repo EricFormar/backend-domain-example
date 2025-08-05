@@ -1,4 +1,4 @@
-import { userCreate, UserCreateRequestModel } from "@project-example/domain";
+import { userCreate, UserCreateRequestModel } from "@project-example/domain/use-cases/user/create-user";
 import { AppError, createInternalServerError } from "@project-example/domain/errors/error";
 import { findUserById } from "@project-example/domain/use-cases/user/user-find-by-id";
 import { Request, Response } from "express";

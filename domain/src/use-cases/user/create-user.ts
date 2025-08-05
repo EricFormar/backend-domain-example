@@ -1,4 +1,4 @@
-import { CryptoRepository } from "src/repositories/crypto-repository";
+import { CryptoRepository } from "../../repositories/crypto-repository";
 import { User } from "../../entities/User";
 import { createInvalidDataError, InvalidDataError } from "../../errors/error";
 import { UserRepository } from "../../repositories/user-repository";
