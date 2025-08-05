@@ -1,5 +1,6 @@
-import { User } from "@project-example/domain/entities/User";
+import { User, UserRole } from "@project-example/domain/entities/User";
 import UserModel from "../database/models/user";
+import RoleModel from "../database/models/rol";
 
 import { UserRepository } from "@project-example/domain/repositories/user-repository";
 import { createNotFoundError } from "@project-example/domain/errors/error";
@@ -9,30 +10,63 @@ export function userService(): UserRepository {
         return {
             id: user.id.toString(),
             name: user.name,
+            surname : user.surname,
             email: user.email,
+            role : user.role.name as UserRole
         };
     };
     return {
+        findAll : async function() {
+            const users = await UserModel.findAll({
+                include : ['role']
+            });
+            return users.map(_mapToUserResponseDto);
+        },
         findByEmail: async function (email: string) {
             const user = await UserModel.findOne({
-                where: { email }
+                where: { email },
+                include : ['role']
             });
             if (!user)
                 throw createNotFoundError(
                     "No existe un usuario con el email " + email
                 );
-            return _mapToUserResponseDto(user);
+            return {
+                id : user.id.toString(),
+                name : user.name,
+                surname : user.surname,
+                email : user.email,
+                role : user.role.name as UserRole,
+                password : user.password,
+                validated : user.validated,
+                locked : user.locked,
+            };
         },
         findById: async function (id: string) {
-            const user = await UserModel.findByPk(id);
+            const user = await UserModel.findByPk(id,{
+                include : ['role']
+            });
             if (!user)
                 throw createNotFoundError(
                     "No existe un usuario con el ID " + id
                 );
             return _mapToUserResponseDto(user);
         },
-        create: async function (user: Omit<User, "id">) {
-            const newUser = await UserModel.create(user);
+        create: async function (user: Pick<User, "name" | "surname" | "email" | "password" | "role">) {
+            
+            const role = await RoleModel.findOne({
+                where : {
+                    name : user.role
+                }
+            });
+
+            const newUser = await UserModel.create({
+                 ...user,
+                rolId : role?.id,
+                validated : false,
+                locked : false,
+                image : ""
+            });
             return _mapToUserResponseDto(newUser);
         },
         update: async function (user: User) {
@@ -53,7 +87,6 @@ export function userService(): UserRepository {
                 );
             }
             await userToDelete.destroy();
-            return true;
         },
     }
 }
