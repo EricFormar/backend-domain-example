@@ -1,9 +1,14 @@
 export interface User {
   id: string;
   name: string;
+  surname : string;
   email: string;
   password : string;
-  role? : UserRole;
+  image?: string;
+  token? : string;
+  validated : boolean;
+  locked : boolean;
+  role : UserRole;
 }
 
 export type UserRole =  "admin" | "user"
