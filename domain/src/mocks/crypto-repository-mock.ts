@@ -12,7 +12,13 @@ export function createCryptoServiceMock() : CryptoRepository {
             return "[HASHED]" + password === hashedPassword
         },
         async generateJWT(user: User) : Promise<string>{
-            return "JWT" + JSON.stringify(user)
+            return "JWT" + JSON.stringify({
+                id : user.id,
+                name : user.name,
+                surname : user.surname,
+                email : user.email,
+                role : user.role
+            })
         },
         async validateToken(token: string) : Promise<User> {
             return JSON.parse(token.slice(3))
