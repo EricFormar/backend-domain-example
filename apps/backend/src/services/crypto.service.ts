@@ -1,7 +1,7 @@
 import { CryptoRepository, User } from "@project-example/domain";
 import bcrypt from "bcrypt";
+import crypto from 'crypto';
 import jwt from "jsonwebtoken";
-
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || 'key_secret';
 const SALT_ROUNDS = 10;
@@ -17,13 +17,13 @@ export function cryptoService(): CryptoRepository {
     generateJWT: async function(user: User) {
       const payload = {
               id : user.id,
-                name : user.name,
-                surname : user.surname,
-                email : user.email,
-                role : user.role
+              name : user.name,
+              surname : user.surname,
+              email : user.email,
+              role : user.role
         };
           return new Promise((resolve, reject) => {
-            jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: '1h' }, (err, token) => {
+            jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: '1m' }, (err, token) => {
                 if (err) {
                     return reject(err);
                 }
@@ -41,6 +41,9 @@ export function cryptoService(): CryptoRepository {
                 resolve(decodedUser);
             });
         });
+    },
+      async generateRandomToken(): Promise<string> {
+        return crypto.randomBytes(32).toString('hex');
     }
   }
 }
