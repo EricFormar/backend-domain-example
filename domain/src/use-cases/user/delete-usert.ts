@@ -12,8 +12,9 @@ export interface DeleteUserRequestModel {
 export async function deleteUser(
   { userRepository }: DeleteUserDependencies,
   { id }: DeleteUserRequestModel
-): Promise<Boolean | NotFoundError > {
-  const result = await userRepository.delete(id);
-  if (!result) return createNotFoundError("User not found");
-  return result;
+): Promise<void | NotFoundError > {
+  const user = await userRepository.findById(id);
+  if (!user) return createNotFoundError("User not found");
+  await userRepository.delete(id);
+  return
 }

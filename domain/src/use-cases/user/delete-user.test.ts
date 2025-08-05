@@ -23,7 +23,7 @@ describe("Delete user", () => {
   test("should get user by id", async () => {
     const userId = "any-id";
     const result = await deleteUser(_dependencies, { id: userId });
-    expect(result).toBe(true);
+    expect(result).toBeUndefined();
   });
 
   test("should throw error when user id does not exist", async () => {
