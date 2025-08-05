@@ -11,6 +11,7 @@ import brandRoutes from "./routes/brand.routes";
 import categoryRoutes from "./routes/category.routes";
 import productRoutes from "./routes/product.routes";
 import userRoutes from "./routes/user.routes";
+import authRoutes from "./routes/auth.routes";
 
 import sequelizeConnection from "./database/connection";
 
@@ -34,6 +35,7 @@ app.use("/api/brands", brandRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
 
 // 404
 app.use((req, res) => {
