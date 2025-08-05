@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, test } from "vitest";
 
-import { createNotFoundError } from "../../errors/error";
 import {
   createProductRepositoryMock,
   MockedProductRepository,
