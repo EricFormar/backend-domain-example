@@ -9,6 +9,7 @@ describe("Login & auth user", () => {
      const _mockedUserRepository: MockedUserRepository = createUserRepositoryMock([
         createUserMock({
             id: "stored-id",
+            name : "stored-name",
             email: "stored@email.com",
             password: "[HASHED]stored-password",
             role : "user"

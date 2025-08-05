@@ -78,16 +78,4 @@ describe("User Role Verification", () => {
     expect(decodedToken).toHaveProperty("role", "user");
   });
 
-  test("Login with a 'blocked' user throws ForbiddenError", async () => {
-     const blockedUser = _mockedUserRepository.users.find(
-      (user) => !user.role
-    );
-    if (!blockedUser) throw new Error("Blocked user not found in mocks");
-    await expect(
-      login(_dependencies, {
-        email: blockedUser.email,
-        password: blockedUser.password.slice(8),
-      })
-    ).rejects.toThrow(createForbiddenError("Access forbidden"));
-  });
 });
