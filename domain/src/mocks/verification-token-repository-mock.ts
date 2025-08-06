@@ -1,27 +1,22 @@
-import { EmailVerificationRepository } from "src/repositories/email-verification-repository";
+import { EmailVerificationToken } from "src/entities/EmailVerificationToken";
+import { VerificationTokenRepository } from "../repositories/verification-token-repository";
 
-interface EmailVerificationToken {
-    email: string;
-    token: string;
-    expiresAt: Date;
-}
-
-export interface MockedEmailVerificationRepository extends EmailVerificationRepository {
+export interface MockedVerificationTokenRepository extends VerificationTokenRepository {
     tokens: EmailVerificationToken[];
     sendEmails: Array<{ email: string; token: string }>;
 }
 
-export function createEmailVerificationRepositoryMock(): MockedEmailVerificationRepository {
+export function createVerificationTokenRepositoryMock(): MockedVerificationTokenRepository {
     return {
         tokens: [],
         sendEmails: [],
 
-        async saveEmailVerificationToken(email: string, token: string, expiresAt: Date): Promise<void> {
+        async saveVerificationToken(email: string, token: string, expiresAt: Date): Promise<void> {
             this.tokens = this.tokens.filter(t => t.email !== email);
             this.tokens.push({ email, token, expiresAt });
         },
 
-        async findEmailVerificationToken(
+        async findVerificationToken(
             token: string
         ): Promise<{ email: string; expiresAt: Date } | null> {
             const tokenData = this.tokens.find(t => t.token === token);
@@ -33,7 +28,7 @@ export function createEmailVerificationRepositoryMock(): MockedEmailVerification
             };
         },
 
-        async deleteEmailVerificationToken(token: string): Promise<void> {
+        async deleteVerificationToken(token: string): Promise<void> {
             this.tokens = this.tokens.filter(t => t.token !== token);
         },
 
