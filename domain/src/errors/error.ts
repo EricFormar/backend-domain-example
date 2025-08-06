@@ -164,3 +164,11 @@ export const createConflictError = (message: string = 'Resource already exists.'
 export const createInternalServerError = (message: string = 'An unexpected internal server error occurred.'): InternalServerError => {
     return new InternalServerError(message);
 };
+
+/**
+ * Creates an InternalServerError.
+ * @param message An optional custom message for the error. Defaults to 'Email sending failed.'
+ */
+export const createEmailSendingError = (message: string = 'Email sending failed.'): InternalServerError => {
+    return new InternalServerError(message);
+};
