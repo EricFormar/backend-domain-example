@@ -31,15 +31,14 @@ export const verifyEmailToken = async (
         throw createNotFoundError('Invalid or expired token');
     }
 
-    // 3. Verificar si el token ha expirado
     const now = new Date();
     if (verificationToken.expiresAt < now) {
-        return createConflictError('Token has expired');
+        throw createConflictError('Token has expired');
     }
 
     const user = await userRepository.findByEmail(verificationToken.email);
     if (!user) {
-        return createNotFoundError('User associated with the token not found');
+        throw createNotFoundError('User associated with the token not found');
     }
 
     await userRepository.update({
@@ -47,7 +46,7 @@ export const verifyEmailToken = async (
         validated: true,
     });
 
-    await verificationTokenRepository.deleteToken(token);
+    await verificationTokenRepository.deleteVerificationToken(token);
 
     return {
         success: true,
