@@ -10,4 +10,5 @@ export interface Product {
   discount: number;
   category?: Category;
   brand?: Brand;
+  stock?: number;
 }
