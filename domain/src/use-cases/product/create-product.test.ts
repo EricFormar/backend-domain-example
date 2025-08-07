@@ -32,6 +32,7 @@ describe("Create Product", () => {
       image : "any-image",
       discount : 0,
       price: 100,
+      stock: 100
     };
     const result = await productCreate(_dependencies, payload);
 
@@ -42,6 +43,7 @@ describe("Create Product", () => {
       price: payload.price,
       image : payload.image,
       discount : payload.discount,
+      stock : payload.stock
     });
   });
 

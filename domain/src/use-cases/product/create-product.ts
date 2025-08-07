@@ -9,7 +9,7 @@ export interface ProductCreateDependencies {
 
 export async function productCreate(
   { productRepository }: ProductCreateDependencies,
-  { name, description, price, image, discount, brand, category }: ProductCreateRequestModel
+  { name, description, price, image, discount, brand, category, stock }: ProductCreateRequestModel
 ): Promise<InvalidDataError | Product> {
   const hasErrors = validateData(name, description, price);
   if (hasErrors) throw hasErrors;
@@ -22,6 +22,7 @@ export async function productCreate(
     discount,
     brand,
     category,
+    stock
   };
 
   return await productRepository.create(product);
