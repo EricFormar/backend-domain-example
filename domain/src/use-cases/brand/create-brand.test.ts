@@ -9,7 +9,7 @@ import {
   BrandCreateDependencies,
   BrandCreateRequestModel,
 } from "./create-brand";
-import { createBadRequestError, createConflictError, createInvalidDataError } from "../../errors/error";
+import { createBadRequestError, createConflictError } from "../../errors/error";
 
 describe("CreateBrand", () => {
   const _mockedBrandRepository: MockedBrandRepository =
