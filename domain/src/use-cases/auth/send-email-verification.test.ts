@@ -7,14 +7,12 @@ import {
   createUserRepositoryMock,
   MockedUserRepository,
 } from "../../mocks/user-repository-mock";
-import {
-  createVerificationTokenRepositoryMock,
-} from "../../mocks/verification-token-repository-mock";
+import { createVerificationTokenRepositoryMock } from "../../mocks/verification-token-repository-mock";
 import { createCryptoRepositoryMock } from "../../mocks/crypto-repository-mock";
 import { createUserMock } from "../../mocks/user-mock";
+import { CryptoRepository } from "../../repositories/crypto-repository";
 
 describe("Send Email Verification Use Case", async () => {
-  // Declaramos y asignamos las variables para evitar el error de TypeScript
   let _mockedVerificationTokenRepository =
     createVerificationTokenRepositoryMock();
   let _mockedCryptoRepository = createCryptoRepositoryMock();
@@ -24,7 +22,6 @@ describe("Send Email Verification Use Case", async () => {
   let _dependencies: SendEmailVerificationDependencies;
 
   beforeEach(() => {
-    // Reasignamos nuevas instancias para cada test
     _mockedVerificationTokenRepository =
       createVerificationTokenRepositoryMock();
     _mockedCryptoRepository = createCryptoRepositoryMock();
@@ -120,4 +117,38 @@ describe("Send Email Verification Use Case", async () => {
     ).toBeDefined();
   });
 
+  test("falla con token", async () => {
+    const email = "email-not-validated@example.com";
+
+    await expect(
+      sendEmailVerification(
+        {
+          userRepository: _mockedUserRepository,
+          verificationTokenRepository: _mockedVerificationTokenRepository,
+          cryptoRepository: {
+            generateRandomToken: () => Promise.reject(),
+          } as any,
+        },
+        { email }
+      )
+    ).rejects.toThrow("Error generating verification token");
+  });
+
+  test("falla con al enviar el email", async () => {
+    const email = "email-not-validated@example.com";
+
+    await expect(
+      sendEmailVerification(
+        {
+          userRepository: _mockedUserRepository,
+          verificationTokenRepository: {
+           ..._mockedVerificationTokenRepository,
+           sendVerificationEmail: () => Promise.reject(), 
+          },
+          cryptoRepository: _mockedCryptoRepository,
+        },
+        { email }
+      )
+    ).rejects.toThrow("Error sending verification email");
+  });
 });
