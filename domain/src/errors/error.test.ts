@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { BadRequestError, ConflictError, InternalServerError, InvalidDataError, NotFoundError, createBadRequestError, createConflictError, createInternalServerError, createInvalidDataError, createNotFoundError } from './error';
+import { BadRequestError, ConflictError, ForbiddenError, InternalServerError, InvalidDataError, NotFoundError, createBadRequestError, createConflictError, createEmailSendingError, createForbiddenError, createInternalServerError, createInvalidDataError, createNotFoundError } from './error';
 
 describe('createInternalServerError', () => {
     it('should create an instance of InternalServerError with the default message', () => {
@@ -72,6 +72,36 @@ describe('createInvalidDataError', () => {
         const customMessage = '400 Invalid Data';
         const error = createInvalidDataError(customMessage);
         expect(error).toBeInstanceOf(InvalidDataError); 
+        expect(error.message).toBe(customMessage);
+    });
+});
+
+describe('createForbiddenError', () => {
+    it('should create an instance of ForbiddenError with the default message', () => {
+        const error = createForbiddenError();
+        expect(error).toBeInstanceOf(ForbiddenError);
+        expect(error.message).toBe('Access forbidden.');
+    });
+
+    it('should create an instance of ForbiddenError with a custom message', () => {
+        const customMessage = '403 Access forbidden.';
+        const error = createForbiddenError(customMessage);
+        expect(error).toBeInstanceOf(ForbiddenError); 
+        expect(error.message).toBe(customMessage);
+    });
+});
+
+describe('createEmailSendingError', () => {
+    it('should create an instance of InternalServerError with the default message', () => {
+        const error = createEmailSendingError();
+        expect(error).toBeInstanceOf(InternalServerError);
+        expect(error.message).toBe('Email sending failed.');
+    });
+
+    it('should create an instance of InternalServerError with a custom message', () => {
+        const customMessage = 'Error in sending email';
+        const error = createEmailSendingError(customMessage);
+        expect(error).toBeInstanceOf(InternalServerError);
         expect(error.message).toBe(customMessage);
     });
 });
