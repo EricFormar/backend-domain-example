@@ -67,6 +67,10 @@ export function createProductRepositoryMock(
     },
     count : async function () {
         return this.products.length
+    },
+    verifyStock : async function(id){
+      const product = this.products.find(p => p.id === id);
+      return product?.stock as number > 0 ? true : false
     }
   };
 }

@@ -8,4 +8,5 @@ export interface ProductRepository {
     delete(id: string): Promise<void>;
     search(data: Partial<Product>): Promise<Product[]>;
     count(): Promise<number>;
+    verifyStock(id : string) : Promise<boolean>
 }
