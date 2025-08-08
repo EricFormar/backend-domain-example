@@ -38,7 +38,7 @@ describe("Create purchase order", async () => {
         })
     });
 
-    test('debería lanzar un InvalidDataError si el total es cero o negativo', async () => {
+    test('should throw an InvalidDataError if the total is zero or negative', async () => {
         const invalidDataTotal: PurchaseOrderRequestModel = {
             total: 0,
             date: new Date(),
@@ -50,7 +50,7 @@ describe("Create purchase order", async () => {
         await expect(purchaseOrderCreate(_dependencies, invalidDataTotal)).rejects.toThrow("El total debe ser un número positivo.")
     });
 
-    test('debería lanzar un InvalidDataError si la fecha no es válida', async () => {
+    test('should throw an InvalidDataError if the date is not valid', async () => {
         const invalidDataDate = {
             total: 150,
             date: "invalid-date",
@@ -61,7 +61,7 @@ describe("Create purchase order", async () => {
             .rejects.toThrow("La fecha no es válida.");
     });
 
-    test('debería lanzar un InvalidDataError si el estado es una cadena vacía', async () => {
+    test('should throw an InvalidDataError if the status is invalid', async () => {
         const invalidDataStatus = {
             total: 150,
             date: new Date('2025-08-07'),
@@ -72,7 +72,7 @@ describe("Create purchase order", async () => {
             .rejects.toThrow("El estado es requerido.");
     });
 
-    test('debería lanzar un InvalidDataError si el comprador es nulo', async () => {
+    test('should throw an InvalidDataError if the buyer is null', async () => {
         const invalidDataBuyer = {
             total: 150,
             date: new Date('2025-08-07'),
