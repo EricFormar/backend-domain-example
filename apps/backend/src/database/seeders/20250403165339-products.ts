@@ -4,6 +4,7 @@ import { QueryInterface, Sequelize } from "sequelize";
 import productsJSON from '../../data/products.json';
 import Category from "../models/category";
 import Brand from "../models/brand";
+import { generateRandomNumber } from "../../../src/utils/generateRandomNumber";
 
 /** @type {import('sequelize-cli').Migration} */
 export = {
@@ -28,6 +29,7 @@ export = {
         discount: product.discount || 0,
         description: product.description,
         image: product.image,
+        stock : generateRandomNumber(1,10),
         categoryId: category?.id,
         brandId: brand?.id,
         createdAt: new Date(),

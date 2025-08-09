@@ -31,6 +31,11 @@ export = {
         allowNull: false,
         type: Sequelize.TEXT
       },
+       stock: {
+        allowNull: false,
+        defaultValue : 0,
+        type: Sequelize.INTEGER
+      },
       brandId: {
         type: Sequelize.INTEGER,
         references: {
