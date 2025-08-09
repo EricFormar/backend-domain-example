@@ -8,6 +8,7 @@ export interface ProductResponseDto {
   price: number;
   discount: number;
   description: string;
+  stock : number;
   brand?: BrandResponseDto;
   category?: CategoryResponseDto;
 }

@@ -16,6 +16,7 @@ export function productService(): ProductRepository {
       price: product.price,
       discount: product.discount,
       description: product.description,
+      stock : product.stock,
       brand: product.brand ? {
         id: product.brand.id.toString(),
         name: product.brand.name,
