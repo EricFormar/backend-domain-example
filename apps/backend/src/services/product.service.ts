@@ -102,5 +102,10 @@ export function productService(): ProductRepository {
       const result = await ProductModel.count();
       return result;
     },
+    verifyStock: async function(id) {
+      const product =  await ProductModel.findByPk(id);
+      if (!product) throw createNotFoundError("No existe una marca con el ID " + id);
+      return product.stock > 0 
+    },
   };
 }

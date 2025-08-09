@@ -11,6 +11,7 @@ class Product extends Model {
   public image! : string;
   public discount!: number;
   public description!: string;
+  public stock! : number;
   public brand!: Brand;
   public category!: Category;
 
@@ -46,6 +47,11 @@ Product.init(
     },
      image: {
       type: DataTypes.TEXT,
+    },
+    stock : {
+      type : DataTypes.NUMBER,
+      allowNull : false,
+      defaultValue : 0
     },
     brandId: {
       type: DataTypes.NUMBER,
