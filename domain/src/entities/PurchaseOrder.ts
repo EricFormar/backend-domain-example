@@ -6,7 +6,7 @@ export interface PurchaseOrder {
   total: number;
   date : Date;
   status: PurchaseStatus;
-  buyer : User;
+  buyer : Partial<User>;
   items? : PurchaseItem[]
 }
 
