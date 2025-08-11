@@ -1,5 +1,6 @@
 import { PurchaseOrderRepository } from "@domain/repositories/purchase-order-repository";
 import OrderModel from "../database/models/order";
+import UserModel from "../database/models/user";
 import {
   PurchaseItemResponseDto,
   PurchaseOrderResponseDto,
@@ -13,6 +14,8 @@ import ProductModel from "src/database/models/product";
 import { Product } from "@domain/entities/Product";
 import ItemModel from "src/database/models/item";
 import { PurchaseItem } from "@domain/entities/PurchaseItem";
+import { createNotFoundError } from "@domain/index";
+import { UserInPurchaseOrder } from "../dtos/user-in-purchase-order";
 
 export function purchaseOrderService(): PurchaseOrderRepository {
   const _mapToPurchaseItemResponseDto = (
@@ -32,25 +35,47 @@ export function purchaseOrderService(): PurchaseOrderRepository {
   };
   const _mapToPurchaseOrderResponseDto = (
     order: OrderModel
-  ): PurchaseOrderResponseDto => {
+  ): PurchaseOrderResponseDto => {    
     return {
       id: order.id.toString(),
       total: order.total,
-      status: order.status.name as PurchaseStatus,
+      status: order.status as unknown as PurchaseStatus,
       date: order.createdAt,
-      buyer: {
-        ...order.user,
-        id: order.user.id.toString(),
-      },
+      buyer: _mapToUserPurchaseResponseDto(order.user),
       items: order.items.map((item) => {
         return _mapToPurchaseItemResponseDto(item);
       }),
     };
   };
+
+  const _mapToUserPurchaseResponseDto = (user : UserModel) : UserInPurchaseOrder =>{
+    return {
+      id : user.id.toString(),
+      name : user.name,
+      surname: user.surname,
+      email: user.email
+    }
+  };
+
+  const _mapToStatusPurchaseResponseDto = (status : StatusModel) : PurchaseStatus => {
+      return status.name.toLowerCase() as PurchaseStatus
+  };
+  
   return {
     createNewPurchaseOrder: async function (order: Omit<PurchaseOrder, "id">) {
-      const newOrder = await OrderModel.create(order);
-      return _mapToPurchaseOrderResponseDto(newOrder);
+      const status = await StatusModel.findOne({
+        where : {name : order.status}
+      });
+      if(!status) throw createNotFoundError("No existe el estado proporcionado")
+      const newOrder = await OrderModel.create({
+        ...order,
+        userId : order.buyer.id,
+        statusId : status.id
+      });
+
+      const orderCreated = await this.findOrderById(newOrder.id.toString()) as PurchaseOrder;      
+
+      return orderCreated;
     },
     updateStatus: async function (
       purchaseOrder: PurchaseOrder,
@@ -75,8 +100,11 @@ export function purchaseOrderService(): PurchaseOrderRepository {
             association: "items",
             include: ["product"],
           },
+          {
+            association : "status"
+          }
         ],
-      });
+      });      
 
       if (!order) return null;
       return _mapToPurchaseOrderResponseDto(order);
