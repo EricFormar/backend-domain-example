@@ -1,13 +1,13 @@
-import { Product } from "src/entities/Product";
-import { PurchaseOrder } from "src/entities/PurchaseOrder";
+import { Product } from "../../../src/entities/Product";
+import { PurchaseOrder } from "../../../src/entities/PurchaseOrder";
 import {
   createConflictError,
   createInvalidDataError,
   createNotFoundError,
   InvalidDataError,
-} from "src/errors/error";
-import { ProductRepository } from "src/repositories/product-repository";
-import { PurchaseOrderRepository } from "src/repositories/purchase-order-repository";
+} from "../../../src/errors/error";
+import { ProductRepository } from "../../../src/repositories/product-repository";
+import { PurchaseOrderRepository } from "../../../src/repositories/purchase-order-repository";
 
 export interface AddProductPurchaseItemDependencies {
   purchaseOrderRepository: PurchaseOrderRepository;
