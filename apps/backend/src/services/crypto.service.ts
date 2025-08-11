@@ -43,7 +43,7 @@ export function cryptoService(): CryptoRepository {
             });
         });
     },
-      async generateRandomToken(): Promise<string> {
+    generateRandomToken(): string {
         return crypto.randomBytes(32).toString('hex');
     }
   }

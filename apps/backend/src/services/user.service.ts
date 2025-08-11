@@ -3,7 +3,7 @@ import UserModel from "../database/models/user";
 import RoleModel from "../database/models/rol";
 
 import { UserRepository } from "@domain/repositories/user-repository";
-import { createNotFoundError } from "@domain/errors/error";
+import { createBadRequestError, createNotFoundError } from "@domain/errors/error";
 
 export function userService(): UserRepository {
     const _mapToUserResponseDto = (user: UserModel): Partial<User> => {
@@ -41,6 +41,7 @@ export function userService(): UserRepository {
             } : null ;
         },
         findById: async function (id: string) {
+            if(!id) throw createBadRequestError("El ID del usuario es requerido")
             const user = await UserModel.findByPk(id,{
                 include : ['role']
             });
