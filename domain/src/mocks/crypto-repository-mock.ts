@@ -23,7 +23,7 @@ export function createCryptoRepositoryMock() : CryptoRepository {
         async validateToken(token: string) : Promise<User> {
             return JSON.parse(token.slice(3))
         },
-        async generateRandomToken(): Promise<string> {
+        generateRandomToken(): string {
             return Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
         },
     }
