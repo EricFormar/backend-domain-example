@@ -12,7 +12,7 @@ import categoryRoutes from "./routes/category.routes";
 import productRoutes from "./routes/product.routes";
 import userRoutes from "./routes/user.routes";
 import authRoutes from "./routes/auth.routes";
-
+import purchaseOrderRoutes from "./routes/purchase-orders.routes";
 import sequelizeConnection from "./database/connection";
 
 const app = express();
@@ -36,6 +36,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/purchase-orders", purchaseOrderRoutes);
 
 // 404
 app.use((req, res) => {
