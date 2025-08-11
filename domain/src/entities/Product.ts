@@ -8,7 +8,7 @@ export interface Product {
   image : string;
   price: number;
   discount: number;
-  category?: Category;
-  brand?: Brand;
+  category?: Partial<Category>;
+  brand?: Partial<Brand>;
   stock?: number;
 }
