@@ -13,7 +13,7 @@ export function createPurchaseOrderRepositoryMock(
 ): MockedPurchaseOrderRepository {
   return {
     orders,
-    create: async function (order) {
+    createNewPurchaseOrder: async function (order) {
       const newOrder = {
         id: "new-id",
         ...order,
