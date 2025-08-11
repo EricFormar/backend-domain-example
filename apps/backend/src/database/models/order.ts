@@ -8,8 +8,10 @@ class Order extends Model {
   
   public id!: number;
   public total!: number;
+  public status!: Status;
   public statusId!: number;
-  public userId!: number;
+  public user!: User;
+  public items! : Item[];
 
   public readonly updatedAt!: Date;
   public readonly createdAt!: Date;

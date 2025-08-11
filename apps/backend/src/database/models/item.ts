@@ -6,6 +6,7 @@ class Item extends Model {
   
   public id!: number;
   public quantity!: number;
+  public product!: Product;
   public productId!: number;
   public orderId!: number;
 
