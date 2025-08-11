@@ -1,5 +1,5 @@
 {
-  "name": "@project-example/domain",
+  "name": "@domain",
   "description": "Lógica de negocio compartida",
   "version": "1.0.0",
   "private": true,
