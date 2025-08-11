@@ -1,9 +1,8 @@
-import { ProductRepository } from "@project-example/domain/repositories/product-repository";
-import { default as ProductModel } from "../database/models/product";
+import { ProductRepository } from "@domain/repositories/product-repository";
+import ProductModel from "../database/models/product";
 
 import { ProductResponseDto } from "../dtos/product-response.dto";
-import { Product } from "@project-example/domain/entities/Product";
-import { createNotFoundError } from "@project-example/domain/errors/error";
+import { Product } from "@domain/entities/Product";
 
 export function productService(): ProductRepository {
   const _mapToProductResponseDto = (
@@ -16,15 +15,19 @@ export function productService(): ProductRepository {
       price: product.price,
       discount: product.discount,
       description: product.description,
-      stock : product.stock,
-      brand: product.brand ? {
-        id: product.brand.id.toString(),
-        name: product.brand.name,
-      } : undefined,
-      category: product.category ? {
-        id: product.category.id.toString(),
-        name: product.category.name,
-      } : undefined,
+      stock: product.stock,
+      brand: product.brand
+        ? {
+            id: product.brand.id.toString(),
+            name: product.brand.name,
+          }
+        : undefined,
+      category: product.category
+        ? {
+            id: product.category.id.toString(),
+            name: product.category.name,
+          }
+        : undefined,
     };
   };
   return {
@@ -41,11 +44,10 @@ export function productService(): ProductRepository {
     },
     // Get product by id
     findById: async function (productId: string) {
-      const product = await ProductModel.findByPk(productId,{
-        include : ["category", "brand"]
+      const product = await ProductModel.findByPk(productId, {
+        include: ["category", "brand"],
       });
-      if (!product)
-        throw createNotFoundError("No existe una marca con el ID " + productId);
+      if (!product) return null;
       return _mapToProductResponseDto(product);
     },
     // Create product
@@ -56,33 +58,32 @@ export function productService(): ProductRepository {
         categoryId: product.category?.id,
       });
       const productCreated = await this.findById(newProduct.id.toString());
-      return _mapToProductResponseDto(productCreated as unknown as ProductModel);
+      return _mapToProductResponseDto(
+        productCreated as unknown as ProductModel
+      );
     },
     // Update product
-    update: async function (product: Product) {      
-      const productToUpdate = await ProductModel.findByPk(product.id);     
-      if (!productToUpdate)
-        throw createNotFoundError(
-          "No existe una marca con el ID " + product.id
-        );
-      productToUpdate.update({
-        name: product.name,
-        image: product.image,
-        price: product.price,
-        discount: product.discount,
-        description: product.description,
-        brandId: product.brand?.id,
-        categoryId: product.category?.id,
-      });
-      const productUpdated = await productToUpdate.save();
-      return _mapToProductResponseDto(productUpdated);
+    update: async function (product: Product) {
+      const productToUpdate = await ProductModel.findByPk(product.id);
+      if (productToUpdate) {
+        productToUpdate.update({
+          name: product.name,
+          image: product.image,
+          price: product.price,
+          discount: product.discount,
+          description: product.description,
+          brandId: product.brand?.id,
+          categoryId: product.category?.id,
+        });
+        const productUpdated = await productToUpdate.save();
+        return _mapToProductResponseDto(productUpdated);
+      }
+      return product;
     },
     // Delete product
     delete: async function (id: string) {
       const productToDelete = await ProductModel.findByPk(id);
-      if (!productToDelete) {
-        throw createNotFoundError("No existe una marca con el ID " + id);
-      }
+      if (!productToDelete) return
       await productToDelete.destroy();
       return;
     },
@@ -103,10 +104,10 @@ export function productService(): ProductRepository {
       const result = await ProductModel.count();
       return result;
     },
-    verifyStock: async function(id) {
-      const product =  await ProductModel.findByPk(id);
-      if (!product) throw createNotFoundError("No existe una marca con el ID " + id);
-      return product.stock > 0 
+    verifyStock: async function (id) {
+      const product = await ProductModel.findByPk(id);
+      if (!product) return false
+      return product.stock > 0;
     },
   };
 }
