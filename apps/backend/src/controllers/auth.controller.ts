@@ -1,8 +1,8 @@
-import { login } from "@project-example/domain/use-cases/user/user-login";
+import { login } from "@domain/use-cases/user/user-login";
 import { cryptoService } from "src/services/crypto.service";
 import { userService } from "src/services/user.service";
 import { Request, Response } from "express";
-import { AppError, createInternalServerError } from "@project-example/domain/errors/error";
+import { AppError, createInternalServerError } from "@domain/errors/error";
 
 export function authController() {
 

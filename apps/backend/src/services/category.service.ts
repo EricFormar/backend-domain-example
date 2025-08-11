@@ -1,9 +1,9 @@
-import { Category } from "@project-example/domain/entities/Category";
+import { Category } from "@domain/entities/Category";
 import { default as CategoryModel } from "../database/models/category";
 
 import { CategoryResponseDto } from "../dtos/category-response.dto";
-import { CategoryRepository } from "@project-example/domain/repositories/category-repository";
-import { createNotFoundError } from "@project-example/domain/errors/error";
+import { CategoryRepository } from "@domain/repositories/category-repository";
+import { createNotFoundError } from "@domain/errors/error";
 
 export function categoryService(): CategoryRepository {
   const _mapToCategoryResponseDto = (

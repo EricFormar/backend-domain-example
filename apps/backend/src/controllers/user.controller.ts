@@ -1,6 +1,6 @@
-import { userCreate, UserCreateRequestModel } from "@project-example/domain/use-cases/user/create-user";
-import { AppError, createInternalServerError } from "@project-example/domain/errors/error";
-import { findUserById } from "@project-example/domain/use-cases/user/user-find-by-id";
+import { userCreate, UserCreateRequestModel } from "@domain/use-cases/user/create-user";
+import { AppError, createInternalServerError } from "@domain/errors/error";
+import { findUserById } from "@domain/use-cases/user/user-find-by-id";
 import { Request, Response } from "express";
 import { cryptoService } from "src/services/crypto.service";
 import { userService } from "src/services/user.service";

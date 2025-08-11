@@ -3,14 +3,14 @@ import {
   AppError,
   createBadRequestError,
   createInternalServerError,
-} from "@project-example/domain/errors/error";
+} from "@domain/errors/error";
 import { brandService } from "../services/brand.service";
-import { Brand } from "@project-example/domain/entities/Brand";
-import { listBrands } from "@project-example/domain/use-cases/brand/brand-list";
-import { findBrandById } from "@project-example/domain/use-cases/brand/brand-find-by-id";
-import { brandCreate } from "@project-example/domain/use-cases/brand/create-brand";
-import { updateBrand } from "@project-example/domain/use-cases/brand/update-brand";
-import { deleteBrand } from "@project-example/domain/use-cases/brand/delete-brand";
+import { Brand } from "@domain/entities/Brand";
+import { listBrands } from "@domain/use-cases/brand/brand-list";
+import { findBrandById } from "@domain/use-cases/brand/brand-find-by-id";
+import { brandCreate } from "@domain/use-cases/brand/create-brand";
+import { updateBrand } from "@domain/use-cases/brand/update-brand";
+import { deleteBrand } from "@domain/use-cases/brand/delete-brand";
 
 export function brandController() {
   return {

@@ -1,4 +1,4 @@
-import { AppError, createInternalServerError } from "@project-example/domain";
+import { AppError, createInternalServerError } from "@domain";
 import { addProductToPurchaseItem } from "@domain/use-cases/purchase/add-product-item-purchase";
 import { Request, Response } from "express";
 import { purchaseOrderService } from "@backend/src/services/order.service";

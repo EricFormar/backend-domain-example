@@ -1,4 +1,4 @@
-import { PurchaseStatus } from "@project-example/domain/entities/PurchaseOrder";
+import { PurchaseStatus } from "@domain/entities/PurchaseOrder";
 import { UserInPurchaseOrder } from "./user-in-purchase-order";
 import { ProductInPurchaseOrder } from "./product-in-purchase-order";
 

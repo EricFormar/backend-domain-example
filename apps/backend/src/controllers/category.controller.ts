@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { categoryService } from "../services/category.service";
-import { AppError, createBadRequestError, createInternalServerError } from "@project-example/domain/errors/error";
-import { Category } from "@project-example/domain/entities/Category";
-import { listCategory } from "@project-example/domain/use-cases/category/category-list";
-import { findCategoryById } from "@project-example/domain/use-cases/category/category-find-by-id";
-import { categoryCreate } from "@project-example/domain/use-cases/category/create-category";
-import { updateCategory } from "@project-example/domain/use-cases/category/update-category";
-import { deleteCategory } from "@project-example/domain/use-cases/category/delete-category";
+import { AppError, createBadRequestError, createInternalServerError } from "@domain/errors/error";
+import { Category } from "@domain/entities/Category";
+import { listCategory } from "@domain/use-cases/category/category-list";
+import { findCategoryById } from "@domain/use-cases/category/category-find-by-id";
+import { categoryCreate } from "@domain/use-cases/category/create-category";
+import { updateCategory } from "@domain/use-cases/category/update-category";
+import { deleteCategory } from "@domain/use-cases/category/delete-category";
 
 export function categoryController() {
   return {

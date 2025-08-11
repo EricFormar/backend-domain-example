@@ -1,9 +1,9 @@
-import { User, UserRole } from "@project-example/domain/entities/User";
+import { User, UserRole } from "@domain/entities/User";
 import UserModel from "../database/models/user";
 import RoleModel from "../database/models/rol";
 
-import { UserRepository } from "@project-example/domain/repositories/user-repository";
-import { createNotFoundError } from "@project-example/domain/errors/error";
+import { UserRepository } from "@domain/repositories/user-repository";
+import { createNotFoundError } from "@domain/errors/error";
 
 export function userService(): UserRepository {
     const _mapToUserResponseDto = (user: UserModel): Partial<User> => {
