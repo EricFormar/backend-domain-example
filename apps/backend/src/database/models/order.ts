@@ -10,6 +10,7 @@ class Order extends Model {
   public total!: number;
   public status!: Status;
   public statusId!: number;
+  public userId! : number;
   public user!: User;
   public items! : Item[];
 
