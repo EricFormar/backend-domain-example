@@ -9,7 +9,7 @@
   ] ,
    "scripts": {
     "build": "yarn workspaces run build",
-    "build:domain": "yarn workspace @project-example/domain build",
+    "build:domain": "yarn workspace @domain build",
     "build:backend": "yarn workspace backend build",
     "start:backend": "yarn workspace backend start" 
   },

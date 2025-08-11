@@ -1,0 +1,15 @@
+{
+  "watch": [
+    "src/**/*.ts"
+  ],
+  "ext": "ts,json",
+  "ignore": [
+    "node_modules"
+  ],
+  "execMap": {
+    "ts": "node --loader ts-node/esm -r tsconfig-paths/register"
+  },
+  "exec": "ts-node -r tsconfig-paths/register src/app.ts"
+}
+
+

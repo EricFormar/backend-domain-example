@@ -6,8 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "node dist/app.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node -r tsconfig-paths/register' src/app.ts",
-    "dev:win": "npx nodemon --watch 'src/**/*.ts' --exec 'npx ts-node -r tsconfig-paths/register src/app.ts'",
+    "dev": "nodemon --config nodemon.json",
+    "dev:win": "nodemon --config nodemon.json",
     "db:init": "npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
     "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
@@ -16,7 +16,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@project-example/domain": "^1.0.0",
+    "@domain": "^1.0.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
