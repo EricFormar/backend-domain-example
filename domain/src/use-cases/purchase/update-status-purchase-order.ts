@@ -7,7 +7,7 @@ export interface UpdateStatusPurchaseOrderDependencies {
 }
 
 export type UpdateStatusPurchaseOrderRequestModel = {
-    order : Pick<PurchaseOrder, "id">,
+    order : PurchaseOrder,
     status : PurchaseStatus
 };
 
