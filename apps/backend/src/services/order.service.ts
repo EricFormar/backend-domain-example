@@ -57,10 +57,6 @@ export function purchaseOrderService(): PurchaseOrderRepository {
     }
   };
 
-  const _mapToStatusPurchaseResponseDto = (status : StatusModel) : PurchaseStatus => {
-      return status.name.toLowerCase() as PurchaseStatus
-  };
-  
   return {
     createNewPurchaseOrder: async function (order: Omit<PurchaseOrder, "id">) {
       const status = await StatusModel.findOne({
