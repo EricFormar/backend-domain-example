@@ -4,11 +4,6 @@ import {
   MockedPurchaseOrderRepository,
 } from "../../mocks/purchase-order-repository-mock";
 import { createPurchaseOrderMock } from "../../mocks/purchase-order-mock";
-import {
-  purchaseOrderCreate,
-  PurchaseOrderRequestModel,
-} from "./create-purchase-order";
-import { createUserMock } from "../../mocks/user-mock";
 import { createProductMock } from "../../mocks/product-mock";
 import { createPurchaseItemMock } from "../../mocks/purchase-item-mock.";
 import {
@@ -20,7 +15,6 @@ import {
   createProductRepositoryMock,
   MockedProductRepository,
 } from "../../mocks/product-repository-mock";
-import Product from "../../../../apps/backend/src/database/models/product";
 
 describe("Add item purchase order", async () => {
   const anyProduct = createProductMock({
