@@ -3,13 +3,13 @@ import { productService } from "../services/product.service";
 import {
   AppError,
   createInternalServerError,
-} from "@project-example/domain/errors/error";
-import { Product } from "@project-example/domain/entities/Product";
-import { listProducts } from "@project-example/domain/use-cases/product/product-list";
-import { findProductById } from "@project-example/domain/use-cases/product/product-find-by-id";
-import { productCreate, ProductCreateRequestModel } from "@project-example/domain/use-cases/product/create-product";
-import { updateProduct } from "@project-example/domain/use-cases/product/update-product";
-import { deleteProduct } from "@project-example/domain/use-cases/product/delete-product";
+} from "@domain/errors/error";
+import { Product } from "@domain/entities/Product";
+import { listProducts } from "@domain/use-cases/product/product-list";
+import { findProductById } from "@domain/use-cases/product/product-find-by-id";
+import { productCreate, ProductCreateRequestModel } from "@domain/use-cases/product/create-product";
+import { updateProduct } from "@domain/use-cases/product/update-product";
+import { deleteProduct } from "@domain/use-cases/product/delete-product";
 
 export function productController() {
   return {
