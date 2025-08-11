@@ -36,7 +36,7 @@ export async function purchaseOrderCreate(
         throw createInvalidDataError("El comprador es requerido.");
     }
 
-    return purchaseOrderRepository.create({
+    return purchaseOrderRepository.createNewPurchaseOrder({
         total,
         date,
         status,
