@@ -21,7 +21,7 @@ export function userService(): UserRepository {
             const users = await UserModel.findAll({
                 include : ['role']
             });
-            return users.map(_mapToUserResponseDto);
+            return users.map(user => _mapToUserResponseDto(user));
         },
         findByEmail: async function (email: string) {
             const user = await UserModel.findOne({
@@ -51,7 +51,7 @@ export function userService(): UserRepository {
                 );
             return _mapToUserResponseDto(user);
         },
-        create: async function (user: Pick<User, "name" | "surname" | "email" | "password" | "role">) {
+        create: async function (user: Omit<User, "id">) {
             
             const role = await RoleModel.findOne({
                 where : {
