@@ -1,6 +1,7 @@
 import path from "path";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import cors from 'cors';
 dotenv.config({
   path: path.resolve(__dirname, "./environments/.env"),
 });
@@ -20,7 +21,8 @@ const app = express();
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(morgan('dev'))
+app.use(morgan('dev'));
+app.use(cors());
 
 // Routes
 app.get("/", (req, res) => {
