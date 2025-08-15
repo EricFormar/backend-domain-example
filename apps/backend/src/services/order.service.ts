@@ -33,13 +33,14 @@ export function purchaseOrderService(): PurchaseOrderRepository {
       },
     };
   };
+
   const _mapToPurchaseOrderResponseDto = (
     order: OrderModel
   ): PurchaseOrderResponseDto => {    
     return {
       id: order.id.toString(),
       total: order.total,
-      status: order.status as unknown as PurchaseStatus,
+      status: _mapStatusPurchaseOrderDto(order.status) as PurchaseStatus,
       date: order.createdAt,
       buyer: _mapToUserPurchaseResponseDto(order.user),
       items: order.items.map((item) => {
@@ -55,6 +56,10 @@ export function purchaseOrderService(): PurchaseOrderRepository {
       surname: user.surname,
       email: user.email
     }
+  };
+
+  const _mapStatusPurchaseOrderDto = (status : StatusModel) => {
+    return status.name.toLowerCase()
   };
 
   return {
@@ -122,6 +127,7 @@ export function purchaseOrderService(): PurchaseOrderRepository {
         },
         include: ["product"],
       });
+      
       if (!created) {
         await item.increment("quantity", { by: 1 });
         purchaseOrder.items?.map((purchaseItem) => {
@@ -131,6 +137,8 @@ export function purchaseOrderService(): PurchaseOrderRepository {
           return purchaseItem;
         });
       } else {
+        console.log(item);
+        
         purchaseOrder.items?.push(_mapToPurchaseItemResponseDto(item));
       }
       return purchaseOrder;
