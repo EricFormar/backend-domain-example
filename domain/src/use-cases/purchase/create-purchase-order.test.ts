@@ -3,18 +3,24 @@ import { createPurchaseOrderRepositoryMock, MockedPurchaseOrderRepository } from
 import { createPurchaseOrderMock } from "../../mocks/purchase-order-mock";
 import { purchaseOrderCreate, PurchaseOrderCreateDependencies, PurchaseOrderRequestModel } from "./create-purchase-order";
 import { createUserMock } from "../../mocks/user-mock";
+import { createUserRepositoryMock, MockedUserRepository } from "../../mocks/user-repository-mock";
 
 describe("Create purchase order", async () => {
     const _mockPurchaseOrderRepository: MockedPurchaseOrderRepository =
         createPurchaseOrderRepositoryMock([
             createPurchaseOrderMock({ id: "any-id" })
         ]);
+    const _mockUserRepository : MockedUserRepository = 
+        createUserRepositoryMock([
+            createUserMock({id: "buyer-id", email : "buyer-email"})
+        ])
 
     let _dependencies: PurchaseOrderCreateDependencies
 
     beforeEach(() => {
         _dependencies = {
-            purchaseOrderRepository: _mockPurchaseOrderRepository
+            purchaseOrderRepository: _mockPurchaseOrderRepository,
+            userRepository : _mockUserRepository
         }
     })
 
@@ -40,21 +46,22 @@ describe("Create purchase order", async () => {
 
     test('should throw an InvalidDataError if the total is zero or negative', async () => {
         const invalidDataTotal: PurchaseOrderRequestModel = {
-            total: 0,
+            total: -10,
             date: new Date(),
             status: "pending",
             buyer: createUserMock({
-                email: "new-buyer"
+                id : "buyer-id",
+                email: "buyer-email"
             })
         };
-        await expect(purchaseOrderCreate(_dependencies, invalidDataTotal)).rejects.toThrow("El total debe ser un número positivo.")
+        await expect(purchaseOrderCreate(_dependencies, invalidDataTotal)).rejects.toThrow("El total debe ser igual o mayor a 0.")
     });
 
     test('should throw an InvalidDataError if the date is not valid', async () => {
         const invalidDataDate = {
             total: 150,
             date: "invalid-date",
-            status: 'enviado',
+            status: 'valid-status',
             buyer: 'María García'
         } as any;
         await expect(purchaseOrderCreate(_dependencies, invalidDataDate))
@@ -69,7 +76,7 @@ describe("Create purchase order", async () => {
             buyer: createUserMock({name : "new-buyer"})
         } as any;
         await expect(purchaseOrderCreate(_dependencies, invalidDataStatus))
-            .rejects.toThrow("El estado es requerido.");
+            .rejects.toThrow("El estado tiene un valor incorrecto.");
     });
 
     test('should throw an InvalidDataError if the buyer is null', async () => {
