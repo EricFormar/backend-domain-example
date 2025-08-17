@@ -1,38 +1,34 @@
-import { Product } from "src/entities/Product";
-import { PurchaseOrder } from "src/entities/PurchaseOrder";
+import { PurchaseOrder } from "../../entities/PurchaseOrder";
 import {
   createInvalidDataError,
   createNotFoundError,
   InvalidDataError,
-} from "src/errors/error";
-import { ProductRepository } from "src/repositories/product-repository";
-import { PurchaseOrderRepository } from "src/repositories/purchase-order-repository";
+} from "../../errors/error";
+import { PurchaseOrderRepository } from "../../repositories/purchase-order-repository";
 
 export interface RemoveProductPurchaseItemDependencies {
   purchaseOrderRepository: PurchaseOrderRepository;
-  productRepository: ProductRepository;
 }
 
 export type RemoveProductPurchaseItemRequestModel = {
-  order: PurchaseOrder;
-  product: Product;
+  order: Pick<PurchaseOrder, "id">;
+  idItem: string;
 };
 
-export async function addProductToPurchaseItem(
+export async function removeProductToPurchaseItem(
   {
     purchaseOrderRepository,
-    productRepository,
   }: RemoveProductPurchaseItemDependencies,
-  { order, product }: RemoveProductPurchaseItemRequestModel
+  { order, idItem }: RemoveProductPurchaseItemRequestModel
 ): Promise<PurchaseOrder | InvalidDataError> {
-  if (!product) throw createInvalidDataError("Product is missing");
-  if (!order) throw createInvalidDataError("Purchase order not found");
+  if (!idItem) throw createInvalidDataError("Item order ID is missing");
+  if (!order) throw createInvalidDataError("Purchase order is missing");
 
-  const existOrder = await purchaseOrderRepository.findOrderById(order.id);
-  if (!existOrder) throw createInvalidDataError("Purchase order not found");
+  const existPurchsaeOrder = await purchaseOrderRepository.findOrderById(order.id);
+  if (!existPurchsaeOrder) throw createInvalidDataError("Purchase order not found");
 
-  const existProduct = await productRepository.findById(product.id);
-  if (!existProduct) throw createNotFoundError("Product not found");
+  const existPurchaseItem = await purchaseOrderRepository.findItemInOrder(idItem, order.id);
+  if (!existPurchaseItem) throw createNotFoundError("Purchase item not found");
 
-  return purchaseOrderRepository.addProductInOrder(order, product);
+  return purchaseOrderRepository.removeItemFromOrder(order, idItem);
 }

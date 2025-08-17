@@ -1,33 +1,31 @@
 import { beforeEach, describe, expect, test } from "vitest";
 import { createPurchaseOrderRepositoryMock, MockedPurchaseOrderRepository } from "../../mocks/purchase-order-repository-mock";
 import { createPurchaseOrderMock } from "../../mocks/purchase-order-mock";
-import { purchaseOrderCreate, PurchaseOrderRequestModel } from "./create-purchase-order";
-import { createUserMock } from "../../mocks/user-mock";
 import { createProductMock } from "../../mocks/product-mock";
 import { createPurchaseItemMock } from "../../mocks/purchase-item-mock.";
-import { createProductRepositoryMock, MockedProductRepository } from "../../mocks/product-repository-mock";
-import { RemoveProductPurchaseItemDependencies, RemoveProductPurchaseItemRequestModel } from "./remove-item-purchase";
+import { RemoveProductPurchaseItemDependencies, RemoveProductPurchaseItemRequestModel, removeProductToPurchaseItem } from "./remove-item-purchase";
+import { PurchaseOrder } from "../../entities/PurchaseOrder";
 
 describe("Add item purchase order", async () => {
     const _mockPurchaseOrderRepository: MockedPurchaseOrderRepository =
         createPurchaseOrderRepositoryMock([
             createPurchaseOrderMock({
-                id: "any-id", items: [
+                id: "order-id", items: [
                     createPurchaseItemMock({
-                        id: "any-id",
+                        id: "any-item-id",
                         quantity: 1,
                         product: createProductMock({
-                            id: "any-id"
+                            id: "any-product-id"
+                        })
+                    }),
+                      createPurchaseItemMock({
+                        id: "other-item-id",
+                        quantity: 1,
+                        product: createProductMock({
+                            id: "any-product-id"
                         })
                     })
                 ]
-            })
-        ]);
-
-    const _mockProductRepository: MockedProductRepository =
-        createProductRepositoryMock([
-            createProductMock({
-                id: "other-id"
             })
         ]);
 
@@ -36,62 +34,56 @@ describe("Add item purchase order", async () => {
     beforeEach(() => {
         _dependencies = {
             purchaseOrderRepository: _mockPurchaseOrderRepository,
-            productRepository: _mockProductRepository
         }
     })
 
     test("should create a new purchase order and return it", async () => {
-        const itemPurchase: RemoveProductPurchaseItemRequestModel = {
+        const itemPurchaseRequestModel: RemoveProductPurchaseItemRequestModel = {
            order : _mockPurchaseOrderRepository.orders[0],
-           product : createProductMock({
-                id : "other-id"
-           })
+           idItem : "other-item-id"
         };
-     
+
+        const response = await removeProductToPurchaseItem(
+            _dependencies,
+            itemPurchaseRequestModel
+        );
+
+        expect((response as PurchaseOrder).items).toHaveLength(1)        
     });
 
-    test('debería lanzar un InvalidDataError si el total es cero o negativo', async () => {
-        const invalidDataTotal: PurchaseOrderRequestModel = {
-            total: 0,
-            date: new Date(),
-            status: "pending",
-            buyer: createUserMock({
-                email: "new-buyer"
-            })
+     test("should create a new purchase order and return it", async () => {
+        const itemPurchaseRequestModel: RemoveProductPurchaseItemRequestModel = {
+           order : _mockPurchaseOrderRepository.orders[0],
+           idItem : "unknown-item-id"
         };
-        await expect(purchaseOrderCreate(_dependencies, invalidDataTotal)).rejects.toThrow("El total debe ser un número positivo.")
+        await expect(removeProductToPurchaseItem(
+            _dependencies,
+            itemPurchaseRequestModel
+        )).rejects.toThrow("Purchase item not found")
     });
 
-    test('debería lanzar un InvalidDataError si la fecha no es válida', async () => {
-        const invalidDataDate = {
-            total: 150,
-            date: "invalid-date",
-            status: 'enviado',
-            buyer: 'María García'
-        } as any;
-        await expect(purchaseOrderCreate(_dependencies, invalidDataDate))
-            .rejects.toThrow("La fecha no es válida.");
+       test("should create a new purchase order and return it", async () => {
+        const itemPurchaseRequestModel: RemoveProductPurchaseItemRequestModel = {
+           order : _mockPurchaseOrderRepository.orders[1],
+           idItem : "any-item-id"
+        };
+        await expect(removeProductToPurchaseItem(
+            _dependencies,
+            itemPurchaseRequestModel
+        )).rejects.toThrow("Purchase order is missing")
     });
 
-    test('debería lanzar un InvalidDataError si el estado es una cadena vacía', async () => {
-        const invalidDataStatus = {
-            total: 150,
-            date: new Date('2025-08-07'),
-            status: "other-status",
-            buyer: createUserMock({ name: "new-buyer" })
-        } as any;
-        await expect(purchaseOrderCreate(_dependencies, invalidDataStatus))
-            .rejects.toThrow("El estado es requerido.");
-    });
-
-    test('debería lanzar un InvalidDataError si el comprador es nulo', async () => {
-        const invalidDataBuyer = {
-            total: 150,
-            date: new Date('2025-08-07'),
-            status: 'pending',
-            buyer: null
-        } as any;
-        await expect(purchaseOrderCreate(_dependencies, invalidDataBuyer))
-            .rejects.toThrow("El comprador es requerido.");
+       test("should create a new purchase order and return it", async () => {
+        const itemPurchaseRequestModel: RemoveProductPurchaseItemRequestModel = {
+           order :  
+            createPurchaseOrderMock({
+                id: "unknow-id", items: []
+            }),
+           idItem : "any-item-id"
+        };
+        await expect(removeProductToPurchaseItem(
+            _dependencies,
+            itemPurchaseRequestModel
+        )).rejects.toThrow("Purchase order not found")
     });
 });
