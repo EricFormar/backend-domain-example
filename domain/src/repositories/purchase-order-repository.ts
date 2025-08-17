@@ -8,6 +8,7 @@ export interface PurchaseOrderRepository {
     findOrderById(id : string): Promise<PurchaseOrder | null> ;
     addProductInOrder(order: PurchaseOrder, product: Product) : Promise<PurchaseOrder>;
     findProductInOrder(product : Product, order : PurchaseOrder) : Promise<PurchaseItem | null>
-    removeItemFromOrder(order : PurchaseOrder, item: PurchaseItem) : Promise<PurchaseOrder>;
-    emptyPurchaseOrder(order : Pick<PurchaseOrder, "id">) : Promise<PurchaseOrder>
+    emptyPurchaseOrder(order : Pick<PurchaseOrder, "id">) : Promise<PurchaseOrder>;
+    removeItemFromOrder(order: Pick<PurchaseOrder, "id">, idItem : string) : Promise<PurchaseOrder>;
+    findItemInOrder(idItem : string, idOrder : string) : Promise<PurchaseItem | null>
 }

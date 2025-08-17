@@ -53,15 +53,24 @@ export function createPurchaseOrderRepositoryMock(
       const item = order.items?.find((item) => item.product.id === product.id);
       return item || null;
     },
+    findItemInOrder: async function (
+      idItem: string,
+      idOrder: string
+    ) {
+      const order = this.orders.find(order => order.id === idOrder)
+      const item = order?.items?.find((item) => item.id === idItem);
+      return item || null;
+    },
     removeItemFromOrder: async function (
       order: PurchaseOrder,
-      item: PurchaseItem
+      idItem: string
     ): Promise<PurchaseOrder> {
-      const itemsFiltered = order.items?.filter((i) => i.id !== item.id);
-      return {
+      const updatedItems = order?.items?.filter(item => item.id !== idItem);
+      const updatedOrder = {
         ...order,
-        items: itemsFiltered,
+        items: updatedItems,
       };
+      return updatedOrder;
     },
     emptyPurchaseOrder: async function (
       order: PurchaseOrder
