@@ -50,7 +50,7 @@
     /* Emit */
     "declaration": true,
     "declarationMap": true,
-    "emitDeclarationOnly": true,
+    "emitDeclarationOnly": false,
     "noEmit": false,
     "outDir": "./dist",
 
