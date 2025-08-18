@@ -12,9 +12,12 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.7",
+    "domain": "^1.0.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "domain": "^1.0.0"
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
@@ -29,10 +32,9 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "storybook": "^8.5.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",
-    "vite": "^7.1.2",
-    "storybook": "^8.5.0"
+    "vite": "^7.1.2"
   }
 }
-
